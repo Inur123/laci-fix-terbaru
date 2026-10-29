@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+fe/node_modules/
+fe/.next/
+fe/tsconfig.tsbuildinfo
+be/bin/
+be/coverage.out
