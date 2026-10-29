@@ -1,30 +1,63 @@
 # Frontend Laci Digital
 
-Frontend ini mempertahankan halaman, komponen, dan alur aplikasi Next.js lama.
-Database, autentikasi, enkripsi, upload, dan aturan bisnis sekarang dijalankan
-oleh API Go di `../be`. Next.js tetap melakukan rendering server dan meneruskan
-permintaan `/api/*` ke backend.
+Frontend Laci Digital menyediakan antarmuka administrasi untuk Sekretaris PAC
+dan Sekretaris Cabang. Next.js menangani rendering halaman, navigasi,
+pengelolaan sesi pada sisi aplikasi, serta komunikasi dengan backend melalui
+server action dan proxy API.
 
-## Menjalankan lokal
+## Tanggung Jawab
 
-1. Pastikan backend Go sudah berjalan di `http://127.0.0.1:8080`.
-2. Jalankan `npm ci` lalu `npm run dev` dari folder ini.
-3. Buka `http://localhost:3000`.
+- Menampilkan menu dan aksi berdasarkan peran pengguna.
+- Menyediakan formulir dengan validasi dan pesan kesalahan yang jelas.
+- Menampilkan data dalam tabel yang mendukung pencarian, filter, sorting, dan pagination.
+- Menangani upload lampiran dan menampilkan status proses kepada pengguna.
+- Menyediakan tampilan desktop dan mobile tanpa mengubah alur kerja tiap modul.
+- Menampilkan pembaruan data realtime pada halaman yang relevan.
+- Menyediakan ekspor Excel pada modul yang memerlukan pelaporan.
 
-`.env.local` sudah disinkronkan dari aplikasi lama. Jika alamat backend berubah,
-sesuaikan `BACKEND_URL`. `API_KEY` di sini hanya dibaca oleh server Next.js.
-Pada mode development lokal reCAPTCHA dilewati agar pembatasan domain lama
-tidak menghalangi login; pada produksi, site key di frontend dan secret key di
-backend tetap digunakan.
+## Struktur
 
-Folder FE tidak menyimpan schema/migrasi Prisma maupun template pengiriman
-email lagi. Migrasi database dan pengiriman email dimiliki BE Go. Server action
-di FE tetap dipakai sebagai penghubung halaman ke API Go, bukan akses database.
-`src/app/api` juga tidak diperlukan: seluruh `/api/*` diteruskan ke BE melalui
-rewrite di `next.config.ts`.
+| Lokasi | Isi |
+| --- | --- |
+| `src/app` | Halaman, layout, server action, dan route publik. |
+| `src/components/features` | Komponen berdasarkan modul administrasi. |
+| `src/components/layout` | Navigasi dan kerangka halaman dashboard. |
+| `src/components/providers` | Session monitoring, realtime, dan reCAPTCHA. |
+| `src/components/shared` | Dialog, crop gambar, filter pengguna, dan komponen lintas fitur. |
+| `src/components/ui` | Komponen dasar antarmuka. |
+| `src/lib` | Client backend, utilitas tanggal, file, presensi, dan ekspor Excel. |
+| `src/types` | Tipe data yang digunakan frontend. |
 
-## Verifikasi
+## Perilaku Berdasarkan Peran
 
-Jalankan `npm run lint`, `npm run typecheck`, dan `npm run build` sebelum rilis.
-Untuk produksi, set `BACKEND_URL` ke alamat backend yang hanya dapat diakses
-oleh frontend; jangan mengekspos port backend langsung ke internet.
+Sekretaris PAC melihat menu dan data milik PAC yang sedang login. Pengajuan yang
+telah diterima dapat dibaca melalui menu referensi. Sekretaris Cabang mendapat
+menu verifikasi pengajuan, agenda kegiatan, Berkas SP, manajemen user, log email,
+monitoring wilayah, dan backup database.
+
+Frontend tetap menyembunyikan menu yang tidak sesuai, tetapi backend menjadi
+sumber keputusan akhir untuk setiap izin akses.
+
+## Tampilan Data
+
+Tabel menggunakan urutan data terbaru sebagai tampilan awal. Nilai panjang
+dipotong secara visual tanpa mengubah isi data, dan nilai lengkap tetap tersedia
+pada detail atau tooltip yang sesuai. Tabel lebar dapat digeser pada layar kecil
+tanpa membuat halaman melebar.
+
+Tombol aksi dibuat ringkas pada desktop dan memiliki area sentuh yang lebih
+besar pada perangkat mobile. Form menampilkan indikator wajib pada label,
+sedangkan kesalahan proses ditampilkan melalui notifikasi.
+
+## Integrasi API
+
+Frontend tidak mengakses database atau object storage secara langsung. Server
+action meneruskan request ke backend bersama cookie sesi yang diperlukan.
+Response API dipetakan ke state halaman tanpa mengubah aturan bisnis di sisi
+client.
+
+## Pengujian
+
+Frontend memiliki pemeriksaan lint, typecheck, production build, pengujian
+utilitas, serta QA visual untuk navigasi, form, tabel, responsivitas, dan aksi
+berdasarkan peran.

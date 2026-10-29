@@ -1,74 +1,66 @@
-# Backend Laci Digital (Go)
+# Backend Laci Digital
 
-Backend ini menjadi satu-satunya pemilik akses database dan aturan bisnis.
-Frontend Next.js berkomunikasi melalui HTTP API dan tidak lagi memakai Prisma.
+Backend Laci Digital menyediakan API dan aturan bisnis untuk seluruh modul
+administrasi PAC dan Cabang. Backend menangani autentikasi, otorisasi,
+pengolahan data, realtime, penyimpanan file, email, dan backup database.
 
-## Menjalankan lokal
+## Tanggung Jawab
 
-1. Untuk proyek lokal ini, `.env` sudah tersedia. Saat menyiapkan lingkungan
-   lain, gunakan `DATABASE_URL` milik database hasil restore, **bukan** URL
-   database lama. `ENCRYPTION_KEY` harus sama dengan aplikasi lama agar data
-   terenkripsi tetap terbaca.
-2. Jalankan `go mod download`.
-3. Untuk database kosong, jalankan `migrations/001_baseline.sql` lalu
-   `migrations/002_performance_and_integrity.sql`. Untuk database hasil restore
-   dari backup aplikasi lama, jalankan **hanya** migrasi `002` setelah membuat
-   salinan cadangan dan memeriksa tidak ada lebih dari satu periode aktif per
-   pengguna. Jangan jalankan baseline di database yang sudah berisi data.
-4. Jalankan `go run ./cmd/api`.
+- Memvalidasi request dan membentuk response JSON yang konsisten.
+- Membatasi akses berdasarkan sesi, peran, pemilik data, dan periode.
+- Menjalankan transaksi untuk operasi yang mengubah beberapa tabel.
+- Mengenkripsi data sensitif, file, dan backup database.
+- Mengelola upload, download, dan penghapusan lampiran pada object storage.
+- Mengirim OTP, pemberitahuan pengajuan, dan email operasional.
+- Menerbitkan pembaruan realtime tanpa menghambat request utama.
+- Mencatat aktivitas pengguna dan hasil pengiriman email.
 
-API tersedia di `http://127.0.0.1:8080`, health check di `/healthz`.
+## Struktur
 
-## Kontrak baca data untuk integrasi
+| Lokasi | Isi |
+| --- | --- |
+| `cmd/api` | Entry point layanan HTTP. |
+| `internal/config` | Pembacaan dan validasi konfigurasi. |
+| `internal/domain` | Model domain yang digunakan lintas modul. |
+| `internal/httpapi` | Routing, middleware, handler, aturan bisnis, dan kontrak API. |
+| `internal/security` | Enkripsi, password, token, dan proteksi backup. |
+| `internal/storage` | Integrasi object storage. |
+| `migrations` | Definisi schema, indeks, dan aturan integritas database. |
 
-Endpoint arsip `GET /api/arsip` memakai sesi pengguna yang aktif. Hasilnya
-selalu dibatasi ke arsip milik pengguna dan periode yang dipilih; menyebut email
-atau ID pengguna lain tidak memberi hak untuk membaca datanya. Contoh untuk
-surat keluar organisasi bersama yang terbaru:
+## Konvensi API
 
-`GET /api/arsip?jenis=KELUAR&organisasi=BERSAMA&sortKey=tanggal&sortDir=desc&page=1&limit=1`
+Endpoint menggunakan method dan status HTTP sesuai jenis operasinya. Response
+error berisi status keberhasilan, pesan yang aman, dan kode error yang dapat
+dipakai frontend. Endpoint daftar mendukung pagination serta filter dan sorting
+sesuai kebutuhan modul.
 
-Respons berisi `data`, `total`, dan `totalPages`. Filter `jenis` dan
-`organisasi` diterapkan sebelum pagination. Urutan tanggal memiliki pemecah
-seri berdasarkan ID sehingga halaman stabil. Filter/sort metadata umum
-dijalankan di PostgreSQL; pencarian `q` dan urutan kolom terenkripsi harus
-mendekripsi data lebih dulu, sehingga lebih mahal pada volume besar. Spesifikasi
-OpenAPI yang sudah diverifikasi tersedia di `GET /api/docs`; cakupannya saat ini
-baru endpoint baca arsip, bukan seluruh API.
+Urutan bawaan menggunakan `createdAt` terbaru dengan ID sebagai pemecah seri.
+Aturan ini menjaga hasil pagination tetap stabil ketika beberapa data memiliki
+waktu pembuatan yang sama.
 
-Belum ada token/role khusus AI. Jika nanti agen membaca atas nama pengguna,
-identitas dan izin harus diverifikasi server-side; email yang disebut di prompt
-tidak boleh diperlakukan sebagai bukti hak akses.
+## Aturan Akses
 
-## Prinsip kompatibilitas
+Sekretaris PAC hanya dapat mengakses data miliknya dan data referensi yang
+memang tersedia bagi PAC. Sekretaris Cabang dapat mengelola data Cabang,
+memeriksa pengajuan PAC, dan membaca data wilayah pada endpoint yang memang
+ditujukan untuk monitoring.
 
-- Nama tabel dan kolom mengikuti schema Prisma lama, termasuk huruf besar.
-- Enkripsi teks/file kompatibel dengan AES-256-CBC + scrypt milik aplikasi lama.
-- Login menerima hash password scrypt Better Auth 1.5.6 dari database lama dan
-  hash bcrypt untuk akun yang dibuat atau diubah melalui backend Go.
-- Session disimpan di tabel `Session` yang sudah ada.
-- Cookie browser bersifat HTTP-only dan dapat diteruskan oleh frontend saat SSR.
-- Sesi lama tetap tersimpan sebagai data historis, tetapi tokennya tidak diterima
-  oleh backend baru. Semua pengguna login ulang setelah migrasi.
+Penyebutan email atau ID pengguna dalam request tidak memberikan hak akses.
+Backend selalu menentukan identitas dari sesi yang sudah diverifikasi.
 
-## Backup berisi data lama
+## Pengelolaan Resource
 
-File `.sql.gz` adalah dump PostgreSQL biasa. Pulihkan ke **database baru yang
-kosong**, bukan di atas database lama. Dump yang diuji memuat pemilik role
-`laci_user`; bila role itu tidak ada di mesin lokal, abaikan perintah `OWNER TO`
-dan `GRANT` saat restore, bukan mengubah data tabel. Jangan masukkan backup
-atau `.env` ke Git.
+Request database membawa context dan timeout agar pembatalan request ikut
+menghentikan pekerjaan terkait. Operasi lintas tabel menggunakan transaksi.
+Connection pool membatasi pemakaian koneksi dan menghindari pembuatan koneksi
+baru pada setiap request.
 
-Untuk menyiapkan `.env` lokal dari kunci enkripsi aplikasi lama tanpa menyalin
-kredensial R2, email, atau Google, tersedia perintah:
+Realtime menggunakan subscriber non-blocking. Subscriber lambat tidak menahan
+request API atau subscriber lain. Backup dan retry email memakai penguncian agar
+pekerjaan yang sama tidak berjalan bersamaan.
 
-`go run ./cmd/setup-local-env -source /path/to/laci-next-js/.env -database 'postgresql://user@localhost:5432/nama_database?sslmode=disable'`
+## Pengujian
 
-Perintah ini tidak menimpa `.env` yang sudah ada. Database lokal yang telah
-dibuat untuk proyek ini bernama `laci_fix_terbaru`.
-
-Untuk menyalin kredensial layanan dari env aplikasi lama ke `.env` backend dan
-`../fe/.env.local` tanpa mengubah URL database maupun session secret baru,
-jalankan `go run ./cmd/sync-legacy-env -source /path/to/laci-next-js/.env`.
-Perintah ini sudah dijalankan untuk proyek lokal ini. Layanan eksternal tidak
-diuji dengan mengirim email atau mengubah objek R2.
+Backend memiliki unit test, integration test dengan schema terisolasi, pengujian
+otorisasi, transaksi, enkripsi, realtime, concurrency, race detection, dan
+benchmark untuk jalur yang sensitif terhadap performa.

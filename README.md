@@ -1,39 +1,57 @@
 # Laci Digital
 
-Proyek ini memisahkan aplikasi lama menjadi `fe/` (Next.js untuk antarmuka dan
-rendering) dan `be/` (Go untuk API, autentikasi, aturan bisnis, database, dan
-penyimpanan). Tampilan dan alur pengguna tetap mengikuti `laci-next-js`.
+Laci Digital adalah sistem administrasi organisasi IPNU dan IPPNU untuk tingkat
+PAC dan Cabang. Sistem ini mengelola arsip, anggota, pengajuan berkas, periode
+kepengurusan, agenda, presensi, aktivitas pengguna, email, dan backup database.
 
-## Data lama
+## Peran Pengguna
 
-Database lokal `laci_fix_terbaru` dipulihkan dari backup
-`laci_db_2026-10-18_000001.sql.gz` yang diberikan pengguna. Restore dilakukan
-ke database baru; database asal dan file backup tidak diubah. Migrasi indeks
-`be/migrations/002_performance_and_integrity.sql` telah diterapkan dan diuji.
-File `be/.env` lokal menunjuk database ini serta menggunakan `ENCRYPTION_KEY`
-dari aplikasi lama agar data terenkripsi dapat dibaca. `fe/.env.local` dan
-`be/.env` menyimpan konfigurasi layanan lama, tetapi tidak menggunakan URL
-database lama. Kedua file tersebut diabaikan Git dan tidak boleh dipublikasikan.
-Login BE menerima hash password scrypt dari Better Auth lama serta bcrypt untuk
-akun baru, sehingga akun dari backup tidak perlu direset hanya karena migrasi.
+| Peran | Cakupan |
+| --- | --- |
+| Sekretaris PAC | Mengelola data PAC miliknya, membuat pengajuan berkas, dan membaca referensi pengajuan yang telah diterima. |
+| Sekretaris Cabang | Mengelola administrasi Cabang, memverifikasi pengajuan PAC, memantau data wilayah, serta mengelola pengguna dan operasional sistem. |
 
-Backup SQL menyimpan metadata lampiran, bukan isi file yang berada di R2.
-Kredensial R2, SMTP, Google, dan reCAPTCHA lama sudah disalin ke env baru.
-Menjalankan fitur unggah/hapus file akan menyentuh bucket R2 lama, dan fitur
-email akan mengirim pesan sungguhan. Google OAuth masih memerlukan callback
-`http://localhost:3000/api/auth/google/callback` dalam daftar URI redirect
-yang diizinkan di Google Cloud untuk berjalan lokal. Sesi login lama tidak
-dipakai oleh backend baru, sehingga pengguna perlu login ulang.
+Hak akses diterapkan pada antarmuka dan API. Pengguna hanya dapat membuka data
+yang sesuai dengan peran, kepemilikan, dan periode yang dipilih.
 
-Template email utama kini berada di BE. Validitas OTP adalah 5 menit sesuai
-aturan aplikasi lama; isi email menampilkan durasi yang sama. Kesetaraan penuh
-dengan alur email lama belum dapat diklaim: lampiran berkas pada email pengajuan
-dan tautan verifikasi otomatis saat mengganti alamat email belum dipindahkan.
-Kedua alur itu perlu diselesaikan sebelum mengganti aplikasi lama di produksi.
+## Modul Sistem
 
-## Menjalankan lokal
+| Modul | Fungsi |
+| --- | --- |
+| Dashboard | Menampilkan ringkasan administrasi pribadi dan monitoring wilayah. |
+| Arsip Surat | Menyimpan surat masuk dan keluar berdasarkan organisasi, jenis surat, serta periode. |
+| Berkas Pimpinan | Menyimpan dokumen pimpinan beserta catatan dan lampirannya. |
+| Berkas SP | Mengelola dokumen SP IPNU atau IPPNU pada tingkat Cabang. |
+| Pengajuan Berkas | Menangani pengajuan PAC, pemeriksaan Cabang, penerimaan, penolakan, dan pemberitahuan email. |
+| Referensi Pengajuan | Menampilkan pengajuan yang telah diterima sebagai referensi bagi PAC. |
+| Data Anggota | Mengelola identitas anggota, riwayat kaderisasi, pendidikan, foto, dan perpindahan data antarperiode. |
+| Periode | Mengatur periode kepengurusan aktif serta akses ke data periode sebelumnya. |
+| Agenda Kegiatan | Mengelola jadwal kegiatan Cabang dalam tampilan daftar dan kalender. |
+| Presensi | Mengatur sesi presensi, jadwal buka dan tutup, peserta, serta ekspor daftar kehadiran. |
+| Manajemen User | Mengelola akun PAC, status akun, detail data, dan reset password. |
+| Riwayat Aktivitas | Mencatat tindakan pengguna dan menyediakan monitoring aktivitas. |
+| Log Email | Mencatat status pengiriman email dan mendukung pengiriman ulang ketika diperlukan. |
+| Backup Database | Membuat, menyimpan, mengunduh, dan merotasi backup database terenkripsi. |
 
-Pada terminal pertama: `cd be && go run ./cmd/api`.
-Pada terminal kedua: `cd fe && npm ci && npm run dev`.
-Frontend tersedia di `http://localhost:3000`, API di `http://127.0.0.1:8080`.
-Keterangan konfigurasi dan migrasi database ada di README masing-masing folder.
+## Pengelolaan Data
+
+- Daftar menampilkan data terbaru berdasarkan waktu penambahan.
+- Pencarian, filter, sorting, dan pagination diterapkan pada modul yang relevan.
+- Data anggota tetap terikat pada pemilik dan periode kepengurusan.
+- Pengajuan hanya dapat diproses melalui status dan peran yang sesuai.
+- Presensi mengikuti tanggal, jam, dan status sesi yang ditentukan.
+- Lampiran tersimpan di object storage dan diakses melalui token sementara.
+- Modul yang mendukung pelaporan menyediakan ekspor Excel tanpa fitur impor.
+
+## Arsitektur
+
+Antarmuka dibangun dengan Next.js. Backend Go menyediakan API, autentikasi,
+aturan bisnis, realtime, pengolahan data, email, penyimpanan file, dan backup.
+PostgreSQL menyimpan data utama, sedangkan lampiran disimpan pada object storage.
+
+## Keamanan
+
+Sistem menggunakan sesi berbasis cookie HTTP-only, pembatasan akses berdasarkan
+peran, validasi input, pembatasan kepemilikan data, enkripsi data sensitif,
+enkripsi file, dan backup terenkripsi. Aktivitas penting dicatat untuk kebutuhan
+audit dan pemantauan operasional.
