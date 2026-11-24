@@ -1,7 +1,7 @@
 # Laci Digital
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v1.1.0-green.svg)](https://github.com/Inur123/laci-fix-terbaru/releases)
+[![Release](https://img.shields.io/badge/Release-v2.1.0-green.svg)](https://github.com/Inur123/laci-fix-terbaru/releases)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
 [![Go](https://img.shields.io/badge/Go-1.24-00ADD8.svg)](https://golang.org/)
 
@@ -49,6 +49,8 @@ yang sesuai dengan peran, kepemilikan, dan periode yang dipilih.
 - Modul yang mendukung pelaporan menyediakan ekspor Excel tanpa fitur impor.
 
 ## Arsitektur
+
+Sistem ini merupakan evolusi Generasi 2 dari repositori awal [laci-next-js](https://github.com/Inur123/laci-next-js) (arsitektur monolitik Next.js), yang kini dipisah menjadi arsitektur decoupled berkinerja tinggi: Frontend Next.js modern (`fe`) dan Backend Go (`be`) dengan konkurensi native, enkripsi AES-GCM, dan manajemen database PostgreSQL.
 
 Antarmuka dibangun dengan Next.js. Backend Go menyediakan API, autentikasi,
 aturan bisnis, realtime, pengolahan data, email, penyimpanan file, dan backup.

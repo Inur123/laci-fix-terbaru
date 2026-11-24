@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [v1.1.0] - 2026-11-24
+## [v2.1.0] - 2026-11-24
 
 ### Added
 - **Agenda Kegiatan Detail & Kalender Libur Nasional**:
@@ -45,9 +45,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [v1.0.0] - 2026-10-23
+## [v2.0.0] - 2026-10-23
 
 ### Added
+- **Major Architecture Overhaul (Generasi 2)**:
+  - Migrasi arsitektur dari sistem awal monolitik [laci-next-js](https://github.com/Inur123/laci-next-js) menjadi sistem decoupled: Frontend Next.js modern (`fe`) dan Backend Go berkinerja tinggi (`be`).
 - Inisialisasi awal arsitektur Next.js Frontend dan Go Backend untuk sistem administrasi Laci Digital (IPNU-IPPNU).
 - Manajemen Arsip Surat (Masuk, Keluar, Bersama).
 - Manajemen Pengajuan Berkas & Surat Rekomendasi/Pengesahan.
