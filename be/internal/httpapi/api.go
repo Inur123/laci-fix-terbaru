@@ -79,6 +79,8 @@ func (a *API) Router() http.Handler {
 
 	r.Get("/healthz", a.health)
 	r.Route("/api", func(r chi.Router) {
+		r.Get("/kegiatan", a.publicKegiatan)
+		r.Options("/kegiatan", a.publicKegiatan)
 		r.Get("/public/stats", a.publicStats)
 		r.Get("/public/readiness", a.publicReadiness)
 		r.Get("/docs", a.openAPISpec)
@@ -236,6 +238,18 @@ func (a *API) accessLog(next http.Handler) http.Handler {
 
 func (a *API) cors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.TrimSuffix(r.URL.Path, "/") == "/api/kegiatan" {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+			next.ServeHTTP(w, r)
+			return
+		}
+
 		origin := r.Header.Get("Origin")
 		if origin == a.cfg.FrontendURL {
 			w.Header().Set("Access-Control-Allow-Origin", origin)

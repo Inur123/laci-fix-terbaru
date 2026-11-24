@@ -1,7 +1,7 @@
 # Laci Digital
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v2.1.0-green.svg)](https://github.com/Inur123/laci-fix-terbaru/releases)
+[![Release](https://img.shields.io/badge/Release-v2.2.0-green.svg)](https://github.com/Inur123/laci-fix-terbaru/releases)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
 [![Go](https://img.shields.io/badge/Go-1.24-00ADD8.svg)](https://golang.org/)
 

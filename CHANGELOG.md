@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v2.2.0] - 2026-11-24
+
+### Added
+- **Endpoint Publik Agenda Kegiatan (`GET /api/kegiatan`)**:
+  - Endpoint publik tanpa autentikasi/cookie untuk integrasi widget kalender blog eksternal (Blogger FullCalendar).
+  - Header CORS terbuka (`Access-Control-Allow-Origin: *`, `Methods: GET, OPTIONS`) serta penanganan preflight `OPTIONS` yang merespons `204 No Content`.
+  - Format output JSON standar RFC3339 untuk `tanggal_mulai` dan `tanggal_selesai` (atau `null` jika tidak ada tanggal selesai).
+  - Dekripsi aman AES-GCM untuk kolom `judul` dan `lokasi` (termasuk penanganan aman jika `lokasi` bernilai `null` atau kosong).
+  - Pengujian menyeluruh (`agenda_public_test.go`) mencakup unit test CORS, serialisasi JSON, dan integration test pembacaan database.
+
+---
+
 ## [v2.1.0] - 2026-11-24
 
 ### Added

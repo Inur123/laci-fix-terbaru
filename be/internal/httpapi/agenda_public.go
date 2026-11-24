@@ -527,3 +527,108 @@ func (a *API) publicData(w http.ResponseWriter, r *http.Request) {
 	result["users"] = users
 	writeJSON(w, 200, result)
 }
+
+type publicKegiatanUser struct {
+	Name string `json:"name"`
+}
+
+type publicKegiatanItem struct {
+	ID             string             `json:"id"`
+	Judul          string             `json:"judul"`
+	TanggalMulai   string             `json:"tanggal_mulai"`
+	TanggalSelesai *string            `json:"tanggal_selesai"`
+	Warna          string             `json:"warna"`
+	Lokasi         *string            `json:"lokasi"`
+	User           publicKegiatanUser `json:"user"`
+}
+
+type publicKegiatanResponse struct {
+	Success bool                 `json:"success"`
+	Data    []publicKegiatanItem `json:"data"`
+}
+
+func (a *API) publicKegiatan(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	rows, err := a.db.Query(r.Context(), `SELECT 
+		a."id", 
+		a."judul", 
+		a."tanggalMulai", 
+		a."tanggalSelesai", 
+		a."warna", 
+		a."lokasi", 
+		u."name"
+	FROM "AgendaKegiatan" a
+	JOIN "User" u ON u."id" = a."userId"
+	ORDER BY a."tanggalMulai" ASC`)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "DATABASE_ERROR", "Gagal mengambil agenda kegiatan")
+		return
+	}
+	defer rows.Close()
+
+	data := make([]publicKegiatanItem, 0)
+	for rows.Next() {
+		var (
+			id, encJudul, warna, userName string
+			tMulai                        time.Time
+			tSelesai                      *time.Time
+			rawLokasi                     *string
+		)
+		if err := rows.Scan(&id, &encJudul, &tMulai, &tSelesai, &warna, &rawLokasi, &userName); err != nil {
+			writeError(w, http.StatusInternalServerError, "DATABASE_ERROR", "Gagal membaca agenda kegiatan")
+			return
+		}
+
+		plainJudul, err := a.crypto.DecryptText(encJudul)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "DATA_UNREADABLE", "Data agenda kegiatan tidak dapat dibaca")
+			return
+		}
+
+		var lokasi *string
+		if rawLokasi != nil && *rawLokasi != "" {
+			plainLokasi, err := a.crypto.DecryptText(*rawLokasi)
+			if err != nil {
+				writeError(w, http.StatusInternalServerError, "DATA_UNREADABLE", "Data agenda kegiatan tidak dapat dibaca")
+				return
+			}
+			lokasi = &plainLokasi
+		}
+
+		var tanggalSelesaiStr *string
+		if tSelesai != nil {
+			s := tSelesai.UTC().Format(time.RFC3339)
+			tanggalSelesaiStr = &s
+		}
+
+		item := publicKegiatanItem{
+			ID:             id,
+			Judul:          plainJudul,
+			TanggalMulai:   tMulai.UTC().Format(time.RFC3339),
+			TanggalSelesai: tanggalSelesaiStr,
+			Warna:          warna,
+			Lokasi:         lokasi,
+			User: publicKegiatanUser{
+				Name: userName,
+			},
+		}
+		data = append(data, item)
+	}
+
+	if err := rows.Err(); err != nil {
+		writeError(w, http.StatusInternalServerError, "DATABASE_ERROR", "Gagal membaca agenda kegiatan")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, publicKegiatanResponse{
+		Success: true,
+		Data:    data,
+	})
+}
