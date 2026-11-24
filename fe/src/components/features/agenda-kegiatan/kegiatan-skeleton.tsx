@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export function KegiatanListSkeleton() {
   return (
@@ -94,7 +94,7 @@ export function KegiatanListSkeleton() {
                 <TableHead className="w-[180px] bg-slate-50/40">Tanggal</TableHead>
                 <TableHead className="w-[200px] bg-slate-50/40">Lokasi</TableHead>
                 <TableHead className="w-[150px] bg-slate-50/40">Status</TableHead>
-                <TableHead className="w-[100px] text-right bg-slate-50/40 pr-6">Aksi</TableHead>
+                <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -124,10 +124,11 @@ export function KegiatanListSkeleton() {
                   <TableCell>
                     <Skeleton className="h-6 w-20 rounded-full" />
                   </TableCell>
-                  <TableCell className="text-right pr-6">
+                  <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                     <div className="flex justify-end gap-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                      <Skeleton className="h-8 w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
                     </div>
                   </TableCell>
                 </TableRow>
@@ -202,6 +203,68 @@ export function KegiatanFormSkeleton() {
           <div className="flex justify-end gap-3 mt-8 pt-6 border-t">
             <Skeleton className="h-10 flex-1 md:flex-none md:w-32 rounded-md" />
             <Skeleton className="h-10 flex-1 md:flex-none md:w-40 rounded-md" />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+export function KegiatanDetailSkeleton() {
+  return (
+    <div className="w-full flex flex-col gap-4 sm:gap-6 animate-pulse">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-11 w-11 sm:h-9 sm:w-9 rounded-md" />
+          <div className="space-y-1.5">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-4 w-60" />
+          </div>
+        </div>
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <Skeleton className="h-11 w-20 sm:h-9 rounded-md" />
+          <Skeleton className="h-11 w-20 sm:h-9 rounded-md" />
+        </div>
+      </div>
+
+      {/* Main Info Card */}
+      <Card className="shadow-sm border-slate-200">
+        <CardHeader className="p-5 sm:p-6 border-b border-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-4 h-4 rounded-full" />
+              <Skeleton className="h-6 w-48 sm:w-64" />
+            </div>
+            <Skeleton className="h-7 w-24 rounded-full" />
+          </div>
+        </CardHeader>
+        <CardContent className="p-5 sm:p-6 space-y-6">
+          {/* Key Details Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 bg-slate-50/60 p-4 sm:p-5 rounded-xl border border-slate-100">
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-24" />
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-3 w-28" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-24" />
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-3 w-28" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-3.5 w-24" />
+              <Skeleton className="h-5 w-36" />
+            </div>
+          </div>
+
+          {/* Deskripsi */}
+          <div className="space-y-2">
+            <Skeleton className="h-3.5 w-32" />
+            <div className="p-4 rounded-xl bg-white border border-slate-200">
+              <Skeleton className="h-4 w-full mb-2" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
           </div>
         </CardContent>
       </Card>

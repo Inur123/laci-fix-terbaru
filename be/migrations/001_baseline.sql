@@ -164,6 +164,7 @@ CREATE TABLE "PresensiData" (
     "tingkat" TEXT,
     "jabatan" TEXT,
     "instansi" TEXT,
+    "asalPimpinan" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "PresensiData_pkey" PRIMARY KEY ("id")

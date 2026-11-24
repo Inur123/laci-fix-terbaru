@@ -35,6 +35,7 @@ export default function LoginClient() {
     } else if (error === "session_expired") {
       toast.error("Sesi login Anda telah berakhir", {
         description: "Silakan login kembali untuk melanjutkan akses.",
+        id: "session-expired",
       });
       hasToasted.current = true;
     }

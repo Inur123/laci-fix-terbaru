@@ -138,7 +138,7 @@ export function DatePickerWithPresets({
             </div>
             <div className="p-2">
               <Calendar
-                initialFocus
+                autoFocus
                 mode="range"
                 defaultMonth={date?.from}
                 selected={date}
@@ -150,8 +150,8 @@ export function DatePickerWithPresets({
                 locale={idLocale}
                 className="rounded-md border-0"
                 captionLayout="dropdown"
-                fromYear={2020}
-                toYear={2030}
+                startMonth={new Date(2020, 0)}
+                endMonth={new Date(2030, 11)}
               />
             </div>
           </div>

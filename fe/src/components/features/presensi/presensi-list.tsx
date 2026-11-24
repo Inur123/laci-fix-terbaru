@@ -279,7 +279,7 @@ export function PresensiList({
             Cari Kegiatan
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Cari nama, tempat, atau penyelenggara..."
               className="pl-9 w-full bg-white h-9 text-sm"
@@ -433,7 +433,7 @@ export function PresensiList({
                     <SortIcon col="isActive" />
                   </button>
                 </TableHead>
-                <TableHead className="w-[60px] text-right bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11">
+                <TableHead className="w-[80px] sm:w-[60px] text-right bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 pr-4 sm:pr-6">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -539,7 +539,7 @@ export function PresensiList({
                     </TableCell>
 
                     {/* Aksi – 3 dot dropdown */}
-                    <TableCell className="text-right">
+                    <TableCell className="w-[80px] sm:w-[60px] text-right pr-4 sm:pr-6">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button

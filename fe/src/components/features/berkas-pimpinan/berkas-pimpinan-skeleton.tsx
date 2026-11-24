@@ -53,10 +53,10 @@ export function BerkasPimpinanSkeleton() {
                 <TableHead className="w-[180px] bg-slate-50/40 whitespace-nowrap">
                   Tanggal
                 </TableHead>
-                <TableHead className="bg-slate-50/40 whitespace-nowrap">
+                <TableHead className="w-[300px] bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6">
                   Catatan
                 </TableHead>
-                <TableHead className="w-[130px] text-right bg-slate-50/40 whitespace-nowrap">
+                <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -73,13 +73,14 @@ export function BerkasPimpinanSkeleton() {
                   <TableCell>
                     <Skeleton className="h-4 w-28" />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="pr-4 sm:pr-6">
                     <Skeleton className="h-4 w-full max-w-[300px]" />
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                     <div className="flex justify-end gap-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                      <Skeleton className="h-8 w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
                     </div>
                   </TableCell>
                 </TableRow>

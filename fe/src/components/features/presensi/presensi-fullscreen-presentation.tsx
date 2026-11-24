@@ -351,7 +351,9 @@ export function PresensiFullscreenPresentation({
                             : item.organisasi}
                         </div>
                         <p className="text-slate-500 text-xs font-semibold truncate">
-                          {item.tingkat ? `${item.tingkat} • ` : ""}
+                          {item.tingkat
+                            ? `${item.tingkat}${item.asalPimpinan ? ` (${item.asalPimpinan})` : ""} • `
+                            : ""}
                           {capitalizeName(
                             item.organisasi === "UMUM"
                               ? item.instansi

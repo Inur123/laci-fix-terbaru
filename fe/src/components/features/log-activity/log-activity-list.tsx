@@ -409,44 +409,14 @@ export function LogActivityList({
 
   return (
     <div className="space-y-6">
-      <div
-        className={cn(
-          "mb-4 grid grid-cols-1 items-end gap-4 sm:grid-cols-2 lg:grid-cols-3",
-          currentView === "global" && isCabang
-            ? "xl:grid-cols-[1.15fr_1.15fr_1fr_1fr_1fr_auto]"
-            : "xl:grid-cols-[1.15fr_1.15fr_1fr_1fr_auto]",
-        )}
-      >
-        <div className="relative w-full">
-          <Label htmlFor="date" className="mb-1 block text-xs font-medium">
-            Rentang Tanggal
-          </Label>
-          <DatePickerWithPresets
-            date={dateRange}
-            onSelect={(value) => {
-              setDateRange(value);
-              setCurrentPage(1);
-            }}
-            className="w-full bg-white border-slate-200 h-9"
-          />
-        </div>
-
-        {currentView === "global" && isCabang && pacUsers.length > 0 && (
-          <div className="w-full">
-            <Label className="text-xs font-medium mb-1 block">
-              Filter User
-            </Label>
-            <UserFilterSelect
-              users={pacUsers}
-              selectedUserId={userFilter}
-              onSelectUser={handleUserFilterSelect}
-              placeholder="Pilih User"
-            />
-          </div>
-        )}
-
-        <div className="w-full">
-          <Label htmlFor="activity-search" className="mb-1 block text-xs font-medium">
+      {/* Filter Section */}
+      <div className="flex flex-wrap xl:flex-nowrap gap-4 mb-6 items-end">
+        {/* Cari Aktivitas */}
+        <div className="w-full xl:w-auto xl:flex-1 relative">
+          <Label
+            htmlFor="activity-search"
+            className="mb-1 block text-xs font-medium"
+          >
             Cari Aktivitas
           </Label>
           <div className="relative">
@@ -459,17 +429,69 @@ export function LogActivityList({
                 setCurrentPage(1);
               }}
               placeholder="Deskripsi aktivitas..."
-              className="h-9 bg-white pl-9"
+              className="pl-9 bg-white border-slate-200 shadow-sm min-h-11 sm:min-h-0 sm:h-9 text-sm"
             />
           </div>
         </div>
 
-        <div className="w-full">
-          <Label htmlFor="activity-action" className="mb-1 block text-xs font-medium">
+        {/* Rentang Tanggal */}
+        <div
+          className={cn(
+            "w-full sm:w-auto xl:flex-none",
+            currentView === "global" && isCabang && pacUsers.length > 0
+              ? "sm:flex-[1.1] sm:min-w-[160px] xl:w-52"
+              : "sm:flex-[1.2] sm:min-w-[170px] xl:w-56",
+          )}
+        >
+          <Label htmlFor="date" className="mb-1 block text-xs font-medium">
+            Rentang Tanggal
+          </Label>
+          <DatePickerWithPresets
+            date={dateRange}
+            onSelect={(value) => {
+              setDateRange(value);
+              setCurrentPage(1);
+            }}
+            className="w-full bg-white border-slate-200 min-h-11 sm:min-h-0 sm:h-9 text-sm shadow-sm"
+          />
+        </div>
+
+        {/* Filter User */}
+        {currentView === "global" && isCabang && pacUsers.length > 0 && (
+          <div className="w-full sm:w-auto sm:flex-[1.1] sm:min-w-[160px] xl:flex-none xl:w-48">
+            <Label className="text-xs font-medium mb-1 block">
+              Filter User
+            </Label>
+            <UserFilterSelect
+              users={pacUsers}
+              selectedUserId={userFilter}
+              onSelectUser={handleUserFilterSelect}
+              placeholder="Pilih User"
+              className="min-h-11 sm:min-h-0 sm:h-9 text-sm shadow-sm"
+            />
+          </div>
+        )}
+
+        {/* Entitas */}
+        <div
+          className={cn(
+            "w-[calc(50%-8px)] sm:w-auto sm:flex-1 xl:flex-none",
+            currentView === "global" && isCabang && pacUsers.length > 0
+              ? "sm:min-w-[120px] xl:w-32"
+              : "sm:min-w-[130px] xl:w-36",
+          )}
+        >
+          <Label
+            htmlFor="activity-action"
+            className="mb-1 block text-xs font-medium"
+          >
             Entitas
           </Label>
           <Select value={actionFilter} onValueChange={handleActionFilterChange}>
-            <SelectTrigger id="activity-action" className="w-full bg-white h-9 text-sm border-slate-200 shadow-sm">
+            <SelectTrigger
+              id="activity-action"
+              className="w-full bg-white min-h-11 sm:min-h-0 sm:h-9 text-sm border-slate-200 shadow-sm"
+            >
               <SelectValue placeholder="Semua" />
             </SelectTrigger>
             <SelectContent>
@@ -485,12 +507,26 @@ export function LogActivityList({
           </Select>
         </div>
 
-        <div className="w-full">
-          <Label htmlFor="activity-module" className="mb-1 block text-xs font-medium">
+        {/* Modul/Menu */}
+        <div
+          className={cn(
+            "w-[calc(50%-8px)] sm:w-auto sm:flex-1 xl:flex-none",
+            currentView === "global" && isCabang && pacUsers.length > 0
+              ? "sm:min-w-[120px] xl:w-36"
+              : "sm:min-w-[130px] xl:w-40",
+          )}
+        >
+          <Label
+            htmlFor="activity-module"
+            className="mb-1 block text-xs font-medium"
+          >
             Modul/Menu
           </Label>
           <Select value={moduleFilter} onValueChange={handleModuleFilterChange}>
-            <SelectTrigger id="activity-module" className="w-full bg-white h-9 text-sm border-slate-200 shadow-sm">
+            <SelectTrigger
+              id="activity-module"
+              className="w-full bg-white min-h-11 sm:min-h-0 sm:h-9 text-sm border-slate-200 shadow-sm"
+            >
               <SelectValue placeholder="Semua" />
             </SelectTrigger>
             <SelectContent>
@@ -504,11 +540,13 @@ export function LogActivityList({
           </Select>
         </div>
 
-        <div className="w-full md:w-auto">
+        {/* Reset Button */}
+        <div className="w-full sm:w-auto shrink-0">
           <Button
             variant="outline"
+            aria-label="Reset filter aktivitas"
             className={cn(
-              "h-9 w-full md:w-auto px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap transition-all duration-200",
+              "w-full sm:w-auto min-h-11 sm:min-h-0 sm:h-9 px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap transition-all duration-200",
               isDirty
                 ? "text-slate-900 border-slate-300 opacity-100"
                 : "text-slate-400 border-slate-200 opacity-50 cursor-not-allowed",

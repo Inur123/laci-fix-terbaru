@@ -58,7 +58,7 @@ export function UserSkeleton() {
                 <TableHead className="w-[150px] bg-slate-50/40">
                   Status
                 </TableHead>
-                <TableHead className="w-[100px] text-right bg-slate-50/40 pr-6">
+                <TableHead className="w-[80px] text-right bg-slate-50/40 whitespace-nowrap">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -81,8 +81,10 @@ export function UserSkeleton() {
                   <TableCell>
                     <Skeleton className="h-6 w-20 rounded-full" />
                   </TableCell>
-                  <TableCell className="text-right pr-6">
-                    <Skeleton className="h-8 w-8 ml-auto rounded-md" />
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Skeleton className="h-8 w-8 rounded-md" />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

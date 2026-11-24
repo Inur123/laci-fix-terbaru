@@ -1,9 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  HelpCircle,
+  LayoutGrid,
+  Mail,
+  MessageCircle,
+  Shield,
+  User,
+  Wrench,
+} from "lucide-react";
+
+import { SiteFooter } from "@/components/features/public-v2/site-footer";
+import { SiteHeader } from "@/components/features/public-v2/site-header";
 import { cn } from "@/lib/utils";
-import { PublicLayout } from "@/components/features/home/home-client";
 
 const faqs = [
   {
@@ -11,15 +23,15 @@ const faqs = [
     items: [
       {
         q: "Apa itu Laci Digital?",
-        a: "LACI Digital (Layanan Cerdas Administrasi) adalah platform manajemen organisasi berbasis web yang dikembangkan khusus untuk PC IPNU IPPNU Kabupaten Magetan. Platform ini membantu pengurus mengelola arsip surat, data anggota, pengajuan dokumen, kegiatan, presensi, dan berbagai administrasi organisasi secara digital dan terpusat.",
+        a: "Laci Digital adalah sistem administrasi internal PC IPNU IPPNU Kabupaten Magetan. Sistem ini dipakai untuk mengelola periode kepengurusan, data anggota, arsip surat, berkas pimpinan, pengajuan PAC, agenda kegiatan, presensi, riwayat aktivitas, dan administrasi akun dalam satu tempat.",
       },
       {
-        q: "Siapa yang bisa menggunakan Laci Digital?",
-        a: "Laci Digital digunakan secara eksklusif oleh pengurus internal PC IPNU IPPNU Kabupaten Magetan. Terdapat dua peran utama:\n\n• Sekretaris Cabang — akses penuh ke seluruh fitur termasuk manajemen pengguna, kegiatan, dan Berkas SP.\n• Sekretaris PAC — akses ke fitur pengajuan, arsip surat, data anggota, presensi, dan berkas di tingkat PAC masing-masing.",
+        q: "Siapa yang dapat menggunakan Laci Digital?",
+        a: "Pengguna utama Laci Digital adalah Sekretaris Cabang dan Sekretaris PAC yang memiliki akun aktif. Sekretaris Cabang mengelola data tingkat cabang serta administrasi akun PAC. Sekretaris PAC mengelola data milik PAC-nya dan mengirim pengajuan ke Cabang. Peserta kegiatan juga dapat mengisi presensi melalui tautan atau QR tanpa harus memiliki akun dashboard.",
       },
       {
-        q: "Apakah Laci Digital bisa diakses dari mana saja?",
-        a: "Ya, Laci Digital adalah aplikasi berbasis web yang dapat diakses dari perangkat apapun (komputer, laptop, handphone) selama terhubung dengan internet dan memiliki akun yang aktif. Tidak perlu menginstal aplikasi tambahan.",
+        q: "Apakah Laci Digital dapat dibuka dari ponsel?",
+        a: "Ya. Laci Digital dapat digunakan melalui browser di komputer, laptop, tablet, atau ponsel. Beberapa proses, seperti login, unggah berkas, scan QR, dan unduh hasil ekspor, tetap bergantung pada izin browser serta koneksi internet perangkat.",
       },
     ],
   },
@@ -27,20 +39,28 @@ const faqs = [
     kategori: "Akun & Registrasi",
     items: [
       {
-        q: "Bagaimana cara mendaftar akun Laci Digital?",
-        a: "Klik tombol 'Daftar' di halaman utama, lalu isi formulir dengan data diri yang valid. Setelah mendaftar, Anda akan menerima email verifikasi — klik link di email tersebut untuk mengaktifkan akun. Setelah terverifikasi, akun dapat langsung digunakan untuk login.",
+        q: "Bagaimana alur pendaftaran akun PAC?",
+        a: "Buka halaman Daftar, isi nama pimpinan, email, dan password, lalu setujui Ketentuan Penggunaan serta Kebijakan Privasi. Sistem membuat akun dengan peran Sekretaris PAC dalam keadaan belum aktif. Kode OTP 6 digit dikirim ke email dan berlaku selama 5 menit. Setelah email terverifikasi, Sekretaris Cabang tetap harus mengaktifkan akun melalui menu Manajemen User sebelum akun dapat login.",
       },
       {
-        q: "Mengapa saya harus verifikasi email?",
-        a: "Verifikasi email wajib dilakukan untuk dapat mengakses seluruh fitur dashboard. Tanpa verifikasi email, akses Anda akan dibatasi hanya pada halaman dashboard utama dan profil. Banner peringatan akan muncul di dashboard jika email belum terverifikasi.",
+        q: "Mengapa halaman pendaftaran dapat ditutup sementara?",
+        a: "Pendaftaran PAC hanya dibuka ketika akun Sekretaris Cabang aktif dan Cabang memiliki periode kepengurusan aktif. Jika syarat ini belum terpenuhi, halaman pendaftaran menampilkan pemberitahuan agar pengguna menghubungi Sekretaris Cabang.",
       },
       {
-        q: "Saya lupa password, bagaimana cara mereset?",
-        a: "Reset password tidak dapat dilakukan secara mandiri. Silakan hubungi Sekretaris Cabang PC IPNU IPPNU Kabupaten Magetan untuk meminta reset password. Sekretaris Cabang memiliki akses untuk mereset password melalui menu Data User di dashboard. Setelah direset, gunakan password baru yang diberikan dan segera ubah dari menu Profil.",
+        q: "Apakah login dengan Google dapat membuat akun baru?",
+        a: "Tidak. Login Google hanya bekerja untuk alamat email yang sudah terdaftar di Laci Digital dan akunnya sudah diaktifkan. Google digunakan untuk mencocokkan identitas email, bukan untuk mendaftarkan akun PAC baru.",
       },
       {
-        q: "Bagaimana cara mengubah data profil saya?",
-        a: "Setelah login, klik nama Anda di bagian bawah sidebar, lalu pilih 'Profil' atau akses melalui menu /dashboard/profile. Di sana Anda dapat mengubah nama, foto profil, dan melakukan verifikasi email.",
+        q: "Mengapa login meminta akses lokasi?",
+        a: "Lokasi digunakan sebagai bagian dari catatan keamanan aktivitas. Browser menyimpan koordinat dan alamat ringkas selama maksimal 24 jam, lalu backend mencatat lokasi bersama IP, browser, dan jenis perangkat pada aktivitas yang relevan. Jika izin lokasi ditolak, proses login tidak dapat dilanjutkan.",
+      },
+      {
+        q: "Saya lupa password. Bagaimana cara meresetnya?",
+        a: "Hubungi Sekretaris Cabang. Melalui menu Manajemen User, Sekretaris Cabang dapat membuat password sementara untuk akun PAC. Proses reset mengakhiri seluruh sesi lama pada akun tersebut. Setelah berhasil login, pengguna dapat mengganti password dari halaman Profil.",
+      },
+      {
+        q: "Mengapa akun yang sudah verifikasi email masih belum bisa login?",
+        a: "Verifikasi email dan aktivasi akun adalah dua tahap yang berbeda. OTP memastikan alamat email dapat diakses, sedangkan aktivasi akun dilakukan oleh Sekretaris Cabang. Login baru dapat dilakukan setelah kedua tahap selesai.",
       },
     ],
   },
@@ -48,24 +68,36 @@ const faqs = [
     kategori: "Fitur Dashboard",
     items: [
       {
-        q: "Apa saja fitur yang tersedia di Laci Digital?",
-        a: "Fitur yang tersedia tergantung pada peran Anda:\n\nSekretaris Cabang & PAC:\n• Pengajuan PAC — mengajukan surat pengantar antar tingkatan\n• Arsip Surat — menyimpan surat masuk dan keluar\n• Berkas Pimpinan — dokumen strategis kepengurusan\n• Data Anggota — kelola data anggota organisasi\n• Presensi — absensi berbasis QR code\n• Riwayat Aktivitas — audit log seluruh aktivitas\n• Periode Kepengurusan — kelola data per masa bakti\n\nKhusus Sekretaris Cabang:\n• Kegiatan — kelola agenda kegiatan organisasi cabang\n• Data User — kelola akun pengguna sistem\n• Berkas SP — berkas surat pengantar tingkat cabang",
+        q: "Apa perbedaan menu untuk Sekretaris Cabang dan Sekretaris PAC?",
+        a: "Kedua peran memiliki Dashboard, Pengajuan Berkas, Arsip Surat, Berkas Pimpinan, Data Anggota, Presensi, Periode, Profil, dan Riwayat Aktivitas. Sekretaris PAC juga memiliki Referensi Pengajuan. Sekretaris Cabang memiliki Berkas SP, Agenda Kegiatan, Manajemen User, Log Email, dan Backup Database. Data serta aksi tertentu tetap dibatasi oleh kepemilikan dan peran di backend.",
       },
       {
-        q: "Apa itu Pengajuan PAC dan bagaimana alurnya?",
-        a: "Pengajuan PAC adalah fitur untuk mengajukan surat pengantar dari tingkat PAC ke tingkat Cabang. Alurnya:\n1. Sekretaris PAC membuat pengajuan baru\n2. Sekretaris Cabang menerima notifikasi dan meninjau pengajuan\n3. Pengajuan dapat diterima atau ditolak dengan keterangan\n4. Status pengajuan dapat dipantau langsung di dashboard",
+        q: "Bagaimana periode kepengurusan memengaruhi data?",
+        a: "Arsip, anggota, berkas, pengajuan, agenda, presensi, statistik, dan riwayat aktivitas dibaca dalam konteks periode. Pengguna dapat membuat periode, mengaktifkan satu periode, melihat periode lain, dan memindahkan salinan anggota ke periode tujuan. Menghapus periode juga menghapus data yang terhubung dengannya, sehingga konfirmasi penghapusan harus diperiksa dengan teliti.",
+      },
+      {
+        q: "Bagaimana alur Pengajuan Berkas dari PAC ke Cabang?",
+        a: "Sekretaris PAC membuat pengajuan dengan nomor surat, penerima, tanggal, keperluan, deskripsi, dan file. Sekretaris Cabang meninjau pengajuan lalu menerima atau menolaknya. Penolakan memuat alasan. Perubahan status dicatat dan sistem mengirim email notifikasi jika layanan email tersedia. PAC dapat memantau status dan melihat pengajuan yang diterima melalui Referensi Pengajuan.",
       },
       {
         q: "Apa perbedaan Arsip Surat, Berkas SP, dan Berkas Pimpinan?",
-        a: "• Arsip Surat — untuk menyimpan surat masuk dan surat keluar yang sudah diproses.\n• Berkas SP — khusus Sekretaris Cabang, untuk menyimpan berkas surat pengantar resmi.\n• Berkas Pimpinan — untuk menyimpan dokumen strategis pengurus seperti SK kepengurusan, sertifikat, dan dokumen penting lainnya.",
+        a: "Arsip Surat menyimpan surat masuk atau keluar dan file bersifat opsional. Berkas Pimpinan menyimpan dokumen kepengurusan Cabang atau PAC dan file juga dapat bersifat opsional sesuai form. Berkas SP hanya tersedia untuk Sekretaris Cabang dan file wajib diunggah.",
       },
       {
-        q: "Apa itu Periode Kepengurusan?",
-        a: "Periode Kepengurusan adalah fitur untuk mengelola data per masa bakti organisasi. Anda dapat beralih antar periode untuk melihat data anggota, arsip, dan statistik pada masa kepengurusan yang berbeda. Setiap pengguna memiliki satu periode aktif yang menentukan konteks data yang ditampilkan.",
+        q: "Bagaimana Data Anggota dikelola?",
+        a: "Data Anggota menyimpan identitas, kontak, jabatan, pendidikan, perkaderan, dan foto. Daftar dapat dicari, difilter, diurutkan, dipaginasi, dan diekspor. Fitur impor Excel tidak digunakan. Sekretaris Cabang dapat melihat data lintas akun sesuai kewenangannya, sedangkan Sekretaris PAC dibatasi pada data miliknya.",
       },
       {
-        q: "Bagaimana fitur Kegiatan dan Presensi bekerja?",
-        a: "• Kegiatan — digunakan untuk membuat dan mengelola agenda kegiatan organisasi.\n• Presensi — menggunakan sistem QR code. Setiap kegiatan memiliki QR yang dapat dipindai anggota untuk mencatat kehadiran secara digital. Fitur ini dapat digunakan baik oleh Sekretaris Cabang maupun Sekretaris PAC.",
+        q: "Bagaimana agenda kegiatan dan presensi bekerja?",
+        a: "Agenda Kegiatan dikelola oleh Sekretaris Cabang. Presensi dapat dibuat oleh Cabang maupun PAC dan menghasilkan tautan atau QR untuk peserta. Form presensi hanya menerima data saat sesi berada dalam jadwal yang diizinkan, kecuali pengurus membuka sesi secara manual. Pengurus juga dapat menutup sesi manual dan melihat detail peserta.",
+      },
+      {
+        q: "Apakah data dapat diekspor?",
+        a: "Ya. Modul yang menyediakan tombol Export dapat mengunduh data sesuai filter yang sedang dipakai. Sistem mengambil seluruh halaman data yang cocok sebelum membuat file agar hasil ekspor tidak terpotong. Fitur impor Excel sudah tidak digunakan.",
+      },
+      {
+        q: "Apa fungsi Riwayat Aktivitas, Log Email, dan Backup Database?",
+        a: "Riwayat Aktivitas mencatat aksi penting seperti login, perubahan data, unggah, penghapusan, dan perubahan status. Pengguna PAC melihat riwayat miliknya, sedangkan Cabang dapat memantau riwayat yang lebih luas. Log Email dan Backup Database hanya tersedia untuk Cabang. Backup baru dienkripsi dan sistem merotasi penyimpanan hingga 10 backup terbaru.",
       },
     ],
   },
@@ -73,16 +105,20 @@ const faqs = [
     kategori: "Keamanan & Privasi",
     items: [
       {
-        q: "Apakah data saya aman di Laci Digital?",
-        a: "Ya. Laci Digital menerapkan enkripsi berlapis untuk berkas sensitif, sistem proteksi anti-bot pada form autentikasi, dan kontrol akses berbasis peran (RBAC). Setiap pengguna hanya dapat mengakses data sesuai wewenang perannya — Sekretaris PAC hanya bisa mengakses data di PAC-nya sendiri, sedangkan Sekretaris Cabang memiliki akses lebih luas.",
+        q: "Bagaimana Laci Digital melindungi akun dan data?",
+        a: "Password disimpan dalam bentuk hash, token sesi disimpan dalam bentuk digest, dan cookie sesi menggunakan HttpOnly serta SameSite. Data teks sensitif dan file baru dienkripsi dengan AES-GCM. Backend juga menerapkan pemeriksaan peran, kepemilikan data, pembatasan ukuran request, rate limit pada endpoint sensitif, validasi origin, dan token unduhan berjangka pendek.",
       },
       {
-        q: "Apakah aktivitas saya di sistem tercatat?",
-        a: "Ya. Laci Digital memiliki fitur Riwayat Aktivitas (Audit Log) yang dapat diakses melalui menu 'Riwayat Aktivitas' di sidebar. Seluruh aktivitas pengguna dicatat beserta waktu dan detailnya untuk keperluan transparansi dan akuntabilitas organisasi.",
+        q: "Data keamanan apa yang dicatat?",
+        a: "Sesi dan riwayat aktivitas dapat mencatat waktu, alamat IP, user agent, nama browser, jenis perangkat, dan lokasi ringkas yang diberikan browser saat login. Catatan ini digunakan untuk audit internal dan penelusuran aktivitas akun.",
       },
       {
-        q: "Apakah ada batasan akses berdasarkan status email?",
-        a: "Ya. Pengguna yang belum melakukan verifikasi email hanya dapat mengakses halaman Dashboard utama dan halaman Profil. Seluruh fitur lainnya dikunci hingga email terverifikasi. Banner peringatan akan tampil di bagian atas dashboard sebagai pengingat.",
+        q: "Apakah pengguna PAC dapat melihat data PAC lain?",
+        a: "Tidak untuk data yang dibatasi kepemilikan. Backend memeriksa akun pemilik, periode, dan peran sebelum membaca atau mengubah data. Sekretaris Cabang memiliki akses lintas PAC hanya pada fitur yang memang diberikan kepada peran Cabang.",
+      },
+      {
+        q: "Apa yang terjadi saat data atau akun dihapus?",
+        a: "Penghapusan dari aplikasi bersifat permanen. Data utama di database dihapus dan file terkait di object storage ikut dijadwalkan untuk dihapus. Jika akun PAC dihapus oleh Cabang, data yang memiliki relasi ke akun tersebut ikut terhapus melalui aturan database. Salinan pada backup dapat tetap ada sampai terhapus oleh rotasi backup.",
       },
     ],
   },
@@ -90,23 +126,33 @@ const faqs = [
     kategori: "Bantuan Teknis",
     items: [
       {
-        q: "Saya mengalami masalah teknis, harus menghubungi siapa?",
-        a: "Jika mengalami masalah teknis, hubungi tim pengembang melalui:\n• WhatsApp: +62 858-5051-2135\n• Email: lacipelajarnumagetan@gmail.com\n\nAnda juga dapat menggunakan fitur 'Laporkan Bug' (ikon Bug) yang tersedia di bagian bawah sidebar dashboard.",
+        q: "Kode OTP tidak masuk. Apa yang harus dilakukan?",
+        a: "Periksa folder Spam atau Promosi, pastikan alamat email benar, lalu gunakan tombol Kirim ulang setelah waktu tunggu selesai. Setiap pengiriman membuat kode baru dan membatalkan kode sebelumnya. Jika layanan email gagal, hubungi Sekretaris Cabang atau tim pengelola.",
       },
       {
-        q: "Mengapa halaman saya lambat atau tidak bisa diakses?",
-        a: "Periksa koneksi internet Anda terlebih dahulu. Jika masalah berlanjut, coba refresh halaman atau bersihkan cache browser. Jika sistem sedang dalam pemeliharaan, akan ada pemberitahuan resmi dari tim pengelola.",
+        q: "Mengapa unggah file ditolak?",
+        a: "Sistem memeriksa ekstensi, isi file, dan ukuran. Dokumen menerima PDF, Word, atau PowerPoint sesuai batas pada form. Foto menerima format gambar yang didukung. Ubah file ke format yang diperbolehkan dan pastikan ukurannya tidak melebihi batas yang ditampilkan.",
+      },
+      {
+        q: "Halaman lambat atau data belum berubah. Apa yang harus dilakukan?",
+        a: "Periksa koneksi internet lalu muat ulang halaman. Laci Digital memakai pembaruan realtime untuk beberapa perubahan, tetapi koneksi realtime dapat terputus sementara. Jika masalah tetap terjadi, catat menu, waktu kejadian, dan pesan error, lalu kirimkan melalui tombol Laporkan Bug atau kontak pengelola.",
+      },
+      {
+        q: "Bagaimana menghubungi pengelola?",
+        a: "Kirim email ke lacipelajarnumagetan@gmail.com atau WhatsApp ke +62 858-5051-2135. Sertakan nama menu, waktu kejadian, dan tangkapan layar jika ada. Jangan mengirim password, kode OTP, atau cookie sesi.",
       },
     ],
   },
 ];
 
 function AccordionItem({
+  itemId,
   q,
   a,
   isOpen,
   onToggle,
 }: {
+  itemId: string;
   q: string;
   a: string;
   isOpen: boolean;
@@ -115,90 +161,183 @@ function AccordionItem({
   return (
     <div
       className={cn(
-        "rounded-2xl border transition-all duration-200",
+        "rounded-2xl border transition-colors",
         isOpen
-          ? "border-[#bbf7d0] bg-[#f0fdf4]"
-          : "border-slate-200 bg-white hover:border-slate-300",
+          ? "border-slate-200/80 bg-[#f0fdf4]"
+          : "border-slate-200/80 bg-white hover:border-slate-300",
       )}
     >
       <button
+        id={`${itemId}-trigger`}
+        type="button"
         onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 p-5 text-left cursor-pointer"
+        className="flex min-h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-2xl p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744] focus-visible:ring-offset-2"
         aria-expanded={isOpen}
+        aria-controls={`${itemId}-content`}
       >
-        <span className="text-sm font-semibold text-slate-900 leading-snug">
+        <span className="text-sm font-semibold leading-snug text-slate-900">
           {q}
         </span>
         <ChevronDown
+          aria-hidden="true"
           className={cn(
-            "h-5 w-5 flex-shrink-0 text-slate-500 transition-transform duration-200",
+            "h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200",
             isOpen && "rotate-180 text-[#15803d]",
           )}
         />
       </button>
       <div
+        id={`${itemId}-content`}
+        role="region"
+        aria-labelledby={`${itemId}-trigger`}
         className={cn(
-          "overflow-hidden transition-all duration-200",
-          isOpen ? "max-h-[600px]" : "max-h-0",
+          "overflow-hidden transition-[max-height] duration-200",
+          isOpen ? "max-h-[1200px]" : "max-h-0",
         )}
       >
-        <p className="px-5 pb-5 text-sm leading-relaxed text-slate-600 whitespace-pre-line">
+        <p className="whitespace-pre-line px-5 pb-5 text-sm leading-7 text-slate-600">
           {a}
         </p>
       </div>
     </div>
   );
 }
+const categoryAppearance = {
+  Umum: {
+    icon: MessageCircle,
+    description: "Gambaran dasar dan pengguna Laci Digital.",
+    color: "bg-[#e6f7ed] text-[#0a8744]",
+  },
+  "Akun & Registrasi": {
+    icon: User,
+    description: "Pendaftaran, OTP, aktivasi, dan login.",
+    color: "bg-[#f3e8ff] text-[#7c3aed]",
+  },
+  "Fitur Dashboard": {
+    icon: LayoutGrid,
+    description: "Menu, alur kerja, periode, dan ekspor data.",
+    color: "bg-[#ffedd5] text-[#ea580c]",
+  },
+  "Keamanan & Privasi": {
+    icon: Shield,
+    description: "Batas akses, enkripsi, dan penghapusan data.",
+    color: "bg-[#e0f2fe] text-[#0284c7]",
+  },
+  "Bantuan Teknis": {
+    icon: Wrench,
+    description: "Solusi untuk kendala yang sering terjadi.",
+    color: "bg-[#e6f7ed] text-[#0a8744]",
+  },
+} as const;
 
-export default function FAQClient() {
+export default function FAQClient({
+  isAuthenticated = false,
+}: {
+  isAuthenticated?: boolean;
+}) {
   const [openIndex, setOpenIndex] = useState<string | null>(null);
 
-  const toggle = (key: string) => {
-    setOpenIndex(openIndex === key ? null : key);
-  };
-
   return (
-    <PublicLayout>
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#bbf7d0] bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#15803d] mb-4">
-            Pusat Bantuan
+    <div className="min-h-screen overflow-x-clip bg-[#fbfdfc] text-[#091526]">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#e3f6eb] via-[#f3fbf6] to-[#dff4e7]">
+        <div
+          aria-hidden="true"
+          className="absolute -right-20 top-12 size-72 rounded-full bg-[#bfe7cf]/45 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute -bottom-20 left-10 size-60 rounded-full bg-white/65 blur-2xl"
+        />
+        <SiteHeader isAuthenticated={isAuthenticated} />
+        <div className="relative mx-auto max-w-4xl px-4 pb-16 pt-10 text-center sm:px-6 sm:pb-20 sm:pt-14 lg:px-8">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-white/85 text-[#0a8744] shadow-sm ring-1 ring-emerald-100">
+            <HelpCircle className="size-6" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Pertanyaan yang Sering Ditanyakan
+          <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#0a8744]">
+            Pusat Bantuan
+          </p>
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">
+            Pertanyaan yang sering ditanyakan
           </h1>
-          <p className="mt-3 text-slate-600 leading-relaxed">
-            Temukan jawaban dari pertanyaan umum seputar Laci Digital. Tidak
-            menemukan jawaban? Hubungi kami langsung.
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            Jawaban berdasarkan fitur dan aturan yang saat ini berlaku di Laci
+            Digital.
           </p>
         </div>
-
-        {/* FAQ List */}
-        <div className="space-y-10">
-          {faqs.map((section) => (
-            <div key={section.kategori}>
-              <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
-                {section.kategori}
-              </h2>
-              <div className="space-y-3">
-                {section.items.map((item, i) => {
-                  const key = `${section.kategori}-${i}`;
-                  return (
-                    <AccordionItem
-                      key={key}
-                      q={item.q}
-                      a={item.a}
-                      isOpen={openIndex === key}
-                      onToggle={() => toggle(key)}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
-    </PublicLayout>
+
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div className="space-y-12">
+          {faqs.map((section) => {
+            const appearance =
+              categoryAppearance[
+                section.kategori as keyof typeof categoryAppearance
+              ];
+            const Icon = appearance.icon;
+
+            return (
+              <section key={section.kategori}>
+                <div className="mb-5 flex items-center gap-3">
+                  <div
+                    className={cn(
+                      "flex size-11 shrink-0 items-center justify-center rounded-2xl",
+                      appearance.color,
+                    )}
+                  >
+                    <Icon className="size-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-extrabold uppercase tracking-[0.13em] text-[#091526]">
+                      {section.kategori}
+                    </h2>
+                    <p className="mt-0.5 text-sm text-slate-500">
+                      {appearance.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {section.items.map((item, index) => {
+                    const key = `${section.kategori}-${index}`;
+                    return (
+                      <AccordionItem
+                        key={key}
+                        itemId={key.replace(/[^a-zA-Z0-9-]/g, "-")}
+                        q={item.q}
+                        a={item.a}
+                        isOpen={openIndex === key}
+                        onToggle={() =>
+                          setOpenIndex(openIndex === key ? null : key)
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+
+        <section className="mt-16 rounded-[28px] bg-gradient-to-br from-[#075d32] to-[#043c22] px-6 py-9 text-center text-white shadow-xl shadow-emerald-950/10 sm:px-10 sm:py-11">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-white/10 text-emerald-100 ring-1 ring-white/15">
+            <Mail className="size-5" />
+          </div>
+          <h2 className="mt-4 text-2xl font-extrabold">
+            Masih memerlukan bantuan?
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-emerald-100/85">
+            Jelaskan menu, waktu kejadian, dan pesan error agar tim pengelola
+            dapat memeriksa masalah dengan tepat.
+          </p>
+          <a
+            href="mailto:lacipelajarnumagetan@gmail.com"
+            className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-[#075d32] transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#075d32]"
+          >
+            Kirim email
+            <ArrowRight className="size-4" />
+          </a>
+        </section>
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

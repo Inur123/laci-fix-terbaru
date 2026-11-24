@@ -11,12 +11,15 @@ import {
   MapPin,
   Sparkles,
   Clock,
+  Briefcase,
+  Building2,
 } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ConfettiEffect } from "@/components/shared/confetti-effect";
+import { cn } from "@/lib/utils";
 
 type SearchParams = Promise<{ id?: string; token?: string }>;
 
@@ -34,13 +37,8 @@ export default async function PresensiSuccessPage({
   if (!data) notFound();
 
   const participant = participantId
-	? await getParticipantDetail(participantId, token)
+    ? await getParticipantDetail(participantId, token)
     : null;
-  const participantAffiliation = participant
-    ? participant.organisasi === "UMUM"
-      ? participant.instansi || "Eksternal"
-      : participant.organisasi
-    : "";
 
   const tanggalFormatted = format(new Date(data.tanggal), "dd MMMM yyyy", {
     locale: idLocale,
@@ -101,40 +99,91 @@ export default async function PresensiSuccessPage({
             </p>
 
             {participant ? (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {/* ID Profil Bar */}
-                <div className="flex items-center gap-3 bg-slate-50/50 p-2 rounded-2xl border border-slate-100">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 shrink-0">
+                <div className="flex items-center gap-3 bg-slate-50/70 p-3 rounded-2xl border border-slate-100">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold shrink-0">
                     <User className="w-5 h-5" strokeWidth={2} />
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <h2 className="text-sm font-bold text-slate-900 leading-tight truncate">
                       {participant.namaLengkap}
                     </h2>
-                    <p className="text-[10px] font-bold text-green-600 uppercase">
-                      {participantAffiliation} {participant.tingkat || ""}
-                    </p>
+                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                      <span
+                        className={cn(
+                          "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border",
+                          participant.organisasi === "IPNU"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : participant.organisasi === "IPPNU"
+                              ? "bg-rose-50 text-rose-700 border-rose-200"
+                              : "bg-slate-100 text-slate-700 border-slate-200",
+                        )}
+                      >
+                        {participant.organisasi === "UMUM"
+                          ? "Eksternal"
+                          : participant.organisasi}
+                      </span>
+                      {participant.organisasi !== "UMUM" &&
+                        participant.tingkat && (
+                          <span className="text-[11px] font-medium text-slate-500">
+                            {participant.tingkat}
+                          </span>
+                        )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Compact Detail List */}
-                <div className="grid grid-cols-1 gap-2.5">
-                  <UserDetail
-                    icon={<Mail className="w-3 h-3" />}
+                {/* Detail List */}
+                <div className="bg-slate-50/50 rounded-2xl border border-slate-100 p-3.5 space-y-2.5">
+                  <DetailItem
+                    icon={<Mail className="w-3.5 h-3.5" />}
+                    label="Email"
                     value={participant.email}
                   />
-                  <UserDetail
-                    icon={<Phone className="w-3 h-3" />}
+                  <DetailItem
+                    icon={<Phone className="w-3.5 h-3.5" />}
+                    label="No. WhatsApp / HP"
                     value={participant.noHp}
                   />
-                  <UserDetail
-                    icon={<MapPin className="w-3 h-3" />}
-                    value={`${participant.jabatan || "Anggota"} - ${participantAffiliation}`}
-                  />
-                  <UserDetail
-                    icon={<Clock className="w-3 h-3" />}
-                    value={`Absen pada Jam ${format(new Date(participant.createdAt), "HH:mm", { locale: idLocale })} WIB`}
-                  />
+
+                  {participant.organisasi === "UMUM" ? (
+                    <div className="pt-2 border-t border-slate-100">
+                      <DetailItem
+                        icon={<Building2 className="w-3.5 h-3.5" />}
+                        label="Instansi / Lembaga"
+                        value={participant.instansi}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                        <DetailItem
+                          icon={<Building2 className="w-3.5 h-3.5" />}
+                          label="Tingkat"
+                          value={participant.tingkat}
+                        />
+                        <DetailItem
+                          icon={<MapPin className="w-3.5 h-3.5" />}
+                          label="Asal Pimpinan"
+                          value={participant.asalPimpinan}
+                        />
+                      </div>
+                      <DetailItem
+                        icon={<Briefcase className="w-3.5 h-3.5" />}
+                        label="Jabatan"
+                        value={participant.jabatan}
+                      />
+                    </>
+                  )}
+
+                  <div className="pt-2 border-t border-slate-100">
+                    <DetailItem
+                      icon={<Clock className="w-3.5 h-3.5" />}
+                      label="Waktu Presensi"
+                      value={`Absen pada Jam ${format(new Date(participant.createdAt), "HH:mm", { locale: idLocale })} WIB`}
+                    />
+                  </div>
                 </div>
               </div>
             ) : (
@@ -172,13 +221,26 @@ function AgendaRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function UserDetail({ icon, value }: { icon: React.ReactNode; value: string }) {
+function DetailItem({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value?: string | null;
+}) {
   return (
-    <div className="flex items-center gap-2">
-      <div className="text-slate-300 shrink-0">{icon}</div>
-      <p className="text-[11px] font-medium text-slate-500 truncate">
-        {value || "-"}
-      </p>
+    <div className="flex items-start gap-2.5 min-w-0">
+      <div className="text-slate-400 shrink-0 mt-0.5">{icon}</div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">
+          {label}
+        </p>
+        <p className="text-xs font-semibold text-slate-700 leading-tight break-words">
+          {value || "-"}
+        </p>
+      </div>
     </div>
   );
 }

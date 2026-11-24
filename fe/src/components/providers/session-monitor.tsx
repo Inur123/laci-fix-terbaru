@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { useSession } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export function SessionMonitor() {
@@ -22,13 +21,7 @@ export function SessionMonitor() {
         window.location.pathname.startsWith("/dashboard");
 
       if (isProtectedRoute) {
-        toast.error("Sesi login Anda telah berakhir", {
-          description: "Silakan login kembali untuk melanjutkan akses.",
-          duration: 5000,
-          id: "session-expired",
-        });
-
-        router.push("/login?error=session_expired");
+        router.replace("/login?error=session_expired");
       }
     }
 

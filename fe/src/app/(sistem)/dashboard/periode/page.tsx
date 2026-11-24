@@ -38,12 +38,12 @@ async function PeriodeContent() {
   return (
     <div className="flex flex-col gap-4 sm:gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-slate-100 rounded-lg text-slate-500">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-2 bg-slate-100 rounded-lg text-slate-500 shrink-0">
             <CalendarDays size={24} />
           </div>
-          <div>
-            <h2 className="text-xl font-semibold">Daftar Periode</h2>
+          <div className="min-w-0">
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Daftar Periode</h2>
             <p className="text-sm text-muted-foreground">
               Kelola masa bakti dan periode kepengurusan Anda.
             </p>
@@ -51,7 +51,7 @@ async function PeriodeContent() {
         </div>
         <Button
           asChild
-          className={`w-full sm:w-auto text-white shadow-md hover:shadow-xl transition-all duration-200 ${
+          className={`w-full sm:w-auto text-white shadow-md hover:shadow-xl transition-all duration-200 shrink-0 ${
             userRole === "SEKRETARIS_CABANG"
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-green-600 hover:bg-green-700"
@@ -64,10 +64,10 @@ async function PeriodeContent() {
         </Button>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 flex gap-3 text-xs leading-relaxed">
+      <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-3.5 sm:p-4 flex gap-3 text-xs leading-relaxed shadow-sm">
         <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-blue-900">Petunjuk Penggunaan Fitur Periode</span>
             <span className="bg-red-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
               Fitur Baru

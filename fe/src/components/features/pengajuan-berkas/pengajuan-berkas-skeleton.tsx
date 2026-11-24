@@ -47,21 +47,44 @@ export function PengajuanBerkasSkeleton({
       </div>
 
       {/* Filter Skeleton */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <Skeleton className="h-10 flex-[3]" />
-        <Skeleton className="h-10 flex-1" />
-        <Skeleton className="h-10 flex-1" />
-        {isCabang && <Skeleton className="h-10 flex-[2]" />}
-        <div className="flex gap-2 w-full md:w-auto">
-          <Skeleton className="h-10 w-24 rounded-md" />
-          <Skeleton className="h-10 w-24 rounded-md" />
+      <div className="flex flex-wrap xl:flex-nowrap gap-4 mb-6 items-end">
+        {/* Search */}
+        <div className="w-full xl:w-auto xl:flex-1 space-y-1.5">
+          <Skeleton className="h-3.5 w-16" />
+          <Skeleton className="h-11 w-full rounded-md" />
+        </div>
+
+        {/* Status */}
+        <div className="w-[calc(50%-8px)] sm:w-auto sm:flex-1 sm:min-w-[130px] xl:flex-none xl:w-36 space-y-1.5">
+          <Skeleton className="h-3.5 w-12" />
+          <Skeleton className="h-11 w-full rounded-md" />
+        </div>
+
+        {/* Penerima */}
+        <div className="w-[calc(50%-8px)] sm:w-auto sm:flex-1 sm:min-w-[130px] xl:flex-none xl:w-36 space-y-1.5">
+          <Skeleton className="h-3.5 w-14" />
+          <Skeleton className="h-11 w-full rounded-md" />
+        </div>
+
+        {/* Filter PAC */}
+        {isCabang && (
+          <div className="w-full sm:w-auto sm:flex-[1.4] sm:min-w-[180px] xl:flex-none xl:w-64 space-y-1.5">
+            <Skeleton className="h-3.5 w-16" />
+            <Skeleton className="h-11 w-full rounded-md" />
+          </div>
+        )}
+
+        {/* Buttons */}
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto shrink-0">
+          <Skeleton className="h-11 w-full sm:w-24 rounded-md" />
+          <Skeleton className="h-11 w-full sm:w-20 rounded-md" />
         </div>
       </div>
 
       {/* Table Skeleton */}
       <div className="rounded-md border overflow-hidden">
         <div className="relative overflow-auto">
-          <Table className="min-w-[1000px]">
+          <Table className="w-full min-w-[1050px] sm:min-w-[1000px] table-fixed [&_td]:py-2 [&_th]:py-2">
             <TableHeader className="bg-slate-50/40 sticky top-0 z-10">
               <TableRow className="hover:bg-transparent">
                 <TableHead className="w-[50px] text-center bg-slate-50/40 whitespace-nowrap">No</TableHead>
@@ -74,7 +97,7 @@ export function PengajuanBerkasSkeleton({
                 <TableHead className="w-[150px] bg-slate-50/40 whitespace-nowrap">Tanggal</TableHead>
                 <TableHead className="bg-slate-50/40 whitespace-nowrap">Keperluan</TableHead>
                 <TableHead className="w-[120px] bg-slate-50/40 whitespace-nowrap">Status</TableHead>
-                <TableHead className="w-[120px] text-right bg-slate-50/40 whitespace-nowrap">Aksi</TableHead>
+                <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -106,9 +129,11 @@ export function PengajuanBerkasSkeleton({
                   <TableCell>
                     <Skeleton className="h-6 w-20 rounded-full" />
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                     <div className="flex justify-end gap-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
                     </div>
                   </TableCell>
                 </TableRow>

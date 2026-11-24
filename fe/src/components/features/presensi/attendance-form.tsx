@@ -195,6 +195,21 @@ export function AttendanceForm({ presensi }: AttendanceFormProps) {
             type="tel"
             inputMode="numeric"
             onKeyDown={(e) => {
+              if (
+                e.key === "Backspace" ||
+                e.key === "Delete" ||
+                e.key === "Tab" ||
+                e.key === "Escape" ||
+                e.key === "Enter" ||
+                e.key === "ArrowLeft" ||
+                e.key === "ArrowRight" ||
+                e.key === "Home" ||
+                e.key === "End" ||
+                e.ctrlKey ||
+                e.metaKey
+              ) {
+                return;
+              }
               if (!/[0-9]/.test(e.key)) {
                 e.preventDefault();
               }
@@ -274,6 +289,16 @@ export function AttendanceForm({ presensi }: AttendanceFormProps) {
                         <SelectItem value="PK">Pimpinan Komisariat</SelectItem>
                       </SelectContent>
                     </Select>
+                  </Field>
+
+                  <Field label="Asal Pimpinan" htmlFor="asal-pimpinan" required>
+                    <Input
+                      id="asal-pimpinan"
+                      name="asalPimpinan"
+                      placeholder="Contoh: PAC Magetan"
+                      className="h-11 rounded-xl border-slate-200 bg-white focus-visible:ring-green-500"
+                      required
+                    />
                   </Field>
 
                   <Field label="Bagian" htmlFor="bagian-sel" required>

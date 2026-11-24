@@ -104,7 +104,10 @@ import type { Viewport } from "next";
 
 export const viewport: Viewport = {
   colorScheme: "only light",
-  themeColor: "#ffffff",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#ffffff" },
+  ],
 };
 
 export default function RootLayout({
@@ -113,9 +116,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="light">
+    <html lang="id" className="light" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}
+        suppressHydrationWarning
       >
         <RealtimeListener />
         <Suspense fallback={null}>

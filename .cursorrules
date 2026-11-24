@@ -1,0 +1,10 @@
+# Cursor AI Rules for Laci Digital
+
+When the user asks to "push ke git", "commit ke github", or similar:
+1. Always run verification: `npm --prefix fe run typecheck` and `cd be && go test ./...`.
+2. Determine SemVer (patch/minor/major) and bump `"version"` in `fe/package.json`.
+3. Update `CHANGELOG.md` with new version and bullet points under Added/Changed/Fixed.
+4. Follow Conventional Commits format: `<type>(<scope>): <summary> [vX.Y.Z]`.
+5. Create an annotated Git tag: `git tag -a vX.Y.Z -m "Release vX.Y.Z: <summary>"`.
+6. Push to GitHub with tags: `git push origin main --tags`.
+7. Never push bare/polosan commits without tags and changelog updates.

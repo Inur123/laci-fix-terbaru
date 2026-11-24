@@ -228,12 +228,12 @@ export function PresensiForm({
               {isSubmitting ? (
                 <>
                   <Spinner className="mr-2 h-4 w-4" />
-                  Memproses...
+                  Menyimpan...
                 </>
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
-                  {isEdit ? "Simpan Perubahan" : "Buat Presensi"}
+                  Simpan
                 </>
               )}
             </Button>

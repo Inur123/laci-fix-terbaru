@@ -15,6 +15,7 @@ import { Trash2, CheckCircle, Edit, Info, Loader2, Eye } from "lucide-react";
 import Link from "next/link";
 import { ConfirmModal } from "@/components/shared/confirm-modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 export function PeriodeList({
   periods,
@@ -128,110 +129,164 @@ export function PeriodeList({
 
   return (
     <div className="grid gap-4">
-      {data.map((periode) => (
-        <div
-          key={periode.id}
-          className={`flex flex-col gap-4 border bg-card p-4 transition-all sm:flex-row sm:items-center sm:justify-between ${
-            periode.isActive
-              ? "border-primary ring-1 ring-primary/20"
-              : "border-border"
-          }`}
-        >
-          <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 items-start gap-2">
-              <span className="min-w-0 break-words text-lg font-semibold [overflow-wrap:anywhere]">
-                {periode.nama}
-              </span>
-              {periode.isActive && (
-                <Badge
+      {data.map((periode) => {
+        const isViewing = Boolean(
+          (activeViewId && activeViewId === periode.id) ||
+            (!activeViewId && periode.isActive),
+        );
+        const formattedDate = new Date(periode.createdAt).toLocaleDateString(
+          "id-ID",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          },
+        );
+
+        return (
+          <div
+            key={periode.id}
+            className={cn(
+              "flex flex-col gap-3 p-4 sm:p-5 rounded-xl border bg-card shadow-sm transition-all sm:flex-row sm:items-center sm:justify-between sm:gap-4",
+              periode.isActive
+                ? userRole === "SEKRETARIS_CABANG"
+                  ? "border-blue-400 ring-1 ring-blue-400/20"
+                  : "border-emerald-400 ring-1 ring-emerald-400/20"
+                : "border-slate-200",
+            )}
+          >
+            {/* Header Info */}
+            <div className="flex items-start justify-between sm:block gap-2 min-w-0">
+              <div className="min-w-0 space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-lg font-bold text-slate-900 tracking-tight break-words">
+                    {periode.nama}
+                  </span>
+                  {periode.isActive && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "shrink-0 font-semibold text-xs shadow-none",
+                        userRole === "SEKRETARIS_CABANG"
+                          ? "bg-blue-100/80 text-blue-700 border-blue-200"
+                          : "bg-emerald-100/80 text-emerald-700 border-emerald-200",
+                      )}
+                    >
+                      Aktif
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-xs text-slate-500">Dibuat: {formattedDate}</p>
+              </div>
+
+              {/* Quick Actions on Mobile (Top Right) */}
+              <div className="flex items-center gap-1 sm:hidden shrink-0">
+                <Button
+                  size="sm"
                   variant="outline"
-                  className="shrink-0 bg-emerald-100/80 text-emerald-700 border-emerald-200 hover:bg-emerald-200/80 shadow-none"
+                  className="h-8 px-2.5 text-xs bg-white text-slate-700 border-slate-200 shadow-sm"
+                  asChild
                 >
-                  Aktif
-                </Badge>
-              )}
+                  <Link href={`/dashboard/periode/${periode.id}/edit`}>
+                    <Edit className="w-3.5 h-3.5 mr-1 text-slate-500" />
+                    Edit
+                  </Link>
+                </Button>
+                {!periode.isActive && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                    onClick={() => setConfirmDeleteId(periode.id)}
+                    disabled={loadingId === periode.id}
+                    title="Hapus periode"
+                    aria-label={`Hapus periode ${periode.nama}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
             </div>
-            <span className="text-xs text-slate-500">
-              Dibuat:{" "}
-              {new Date(periode.createdAt).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </span>
-          </div>
 
-          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
-            <Button
-              size="sm"
-              variant={
-                (activeViewId && activeViewId === periode.id) || (!activeViewId && periode.isActive)
-                  ? "default"
-                  : "outline"
-              }
-              className={
-                (activeViewId && activeViewId === periode.id) || (!activeViewId && periode.isActive)
-                  ? userRole === "SEKRETARIS_CABANG"
-                    ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : "bg-green-600 hover:bg-green-700 text-white"
-                  : ""
-              }
-              disabled={viewLoadingId === periode.id}
-              onClick={() => handleView(periode.id, periode.nama)}
-            >
-              {viewLoadingId === periode.id ? (
-                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-              ) : (
-                <Eye className="w-4 h-4 mr-1" />
-              )}
-              {(activeViewId && activeViewId === periode.id) || (!activeViewId && periode.isActive)
-                ? "Sedang Ditampilkan"
-                : "Tampilkan"}
-            </Button>
-
-            {!periode.isActive && (
+            {/* Actions Bar (Bottom on Mobile, Right on Desktop) */}
+            <div className="flex items-center gap-2 w-full pt-2.5 sm:pt-0 border-t sm:border-t-0 border-slate-100 sm:w-auto sm:justify-end">
               <Button
                 size="sm"
-                variant="outline"
-                onClick={() => handleActivate(periode.id)}
-                disabled={loadingId === periode.id}
-              >
-                {loadingId === periode.id ? (
-                  <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                ) : (
-                  <CheckCircle className="w-4 h-4 mr-1" />
+                variant={isViewing ? "default" : "outline"}
+                className={cn(
+                  "flex-1 sm:flex-initial h-9 text-xs sm:text-sm font-medium whitespace-nowrap",
+                  isViewing
+                    ? userRole === "SEKRETARIS_CABANG"
+                      ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                      : "bg-green-600 hover:bg-green-700 text-white shadow-sm"
+                    : "bg-white",
                 )}
-                {loadingId === periode.id ? "Memproses..." : "Aktifkan"}
+                disabled={viewLoadingId === periode.id}
+                onClick={() => handleView(periode.id, periode.nama)}
+              >
+                {viewLoadingId === periode.id ? (
+                  <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                ) : (
+                  <Eye className="w-3.5 h-3.5 mr-1.5" />
+                )}
+                {isViewing ? "Sedang Ditampilkan" : "Tampilkan"}
               </Button>
-            )}
-            <Button size="sm" variant="outline" asChild>
-              <Link href={`/dashboard/periode/${periode.id}/edit`}>
-                <Edit className="w-4 h-4 mr-1" />
-                Edit
-              </Link>
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="text-red-500 hover:text-red-600 hover:bg-red-50"
-              onClick={() => setConfirmDeleteId(periode.id)}
-              disabled={loadingId === periode.id || periode.isActive}
-              title={
-                periode.isActive
-                  ? "Periode aktif tidak dapat dihapus"
-                  : "Hapus periode"
-              }
-              aria-label={
-                periode.isActive
-                  ? `Periode ${periode.nama} aktif dan tidak dapat dihapus`
-                  : `Hapus periode ${periode.nama}`
-              }
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+
+              {!periode.isActive && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex-1 sm:flex-initial h-9 text-xs sm:text-sm font-medium bg-white whitespace-nowrap"
+                  onClick={() => handleActivate(periode.id)}
+                  disabled={loadingId === periode.id}
+                >
+                  {loadingId === periode.id ? (
+                    <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+                  ) : (
+                    <CheckCircle
+                      className={cn(
+                        "w-3.5 h-3.5 mr-1.5",
+                        userRole === "SEKRETARIS_CABANG"
+                          ? "text-blue-600"
+                          : "text-emerald-600",
+                      )}
+                    />
+                  )}
+                  {loadingId === periode.id ? "Memproses..." : "Aktifkan"}
+                </Button>
+              )}
+
+              {/* Desktop Actions (Edit & Delete) */}
+              <div className="hidden sm:flex sm:items-center sm:gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-9 px-3 text-sm bg-white"
+                  asChild
+                >
+                  <Link href={`/dashboard/periode/${periode.id}/edit`}>
+                    <Edit className="w-3.5 h-3.5 mr-1.5 text-slate-500" />
+                    Edit
+                  </Link>
+                </Button>
+                {!periode.isActive && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-9 w-9 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                    onClick={() => setConfirmDeleteId(periode.id)}
+                    disabled={loadingId === periode.id}
+                    title="Hapus periode"
+                    aria-label={`Hapus periode ${periode.nama}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       <ConfirmModal
         isOpen={!!confirmDeleteId}

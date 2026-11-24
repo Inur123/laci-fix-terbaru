@@ -20,7 +20,7 @@ async function AddPeriodeContent() {
   if (!session?.user) redirect("/login");
 
   return (
-    <div className="max-w-xl space-y-8">
+    <div className="flex flex-col gap-4 sm:gap-6 max-w-xl">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="icon" asChild>
           <Link href="/dashboard/periode" aria-label="Kembali ke daftar periode">

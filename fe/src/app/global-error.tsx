@@ -11,8 +11,8 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    <html lang="id">
-      <body className="antialiased font-sans">
+    <html lang="id" suppressHydrationWarning>
+      <body className="antialiased font-sans" suppressHydrationWarning>
         <ErrorView
           title="Fatal System Error"
           description="Terjadi kesalahan fatal pada sistem aplikasi. Mohon maaf atas ketidaknyamanan ini. Silakan coba muat ulang aplikasi."

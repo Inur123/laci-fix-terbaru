@@ -239,7 +239,7 @@ export function KegiatanForm({ kegiatan, userRole }: KegiatanFormProps) {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      initialFocus
+                      autoFocus
                       mode="range"
                       defaultMonth={date?.from}
                       selected={date}
@@ -277,7 +277,7 @@ export function KegiatanForm({ kegiatan, userRole }: KegiatanFormProps) {
                 <div className="space-y-2">
                   <Label htmlFor="startTime">Jam Mulai</Label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Clock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="startTime"
                       name="startTime"
@@ -294,7 +294,7 @@ export function KegiatanForm({ kegiatan, userRole }: KegiatanFormProps) {
                     Jam Selesai <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Clock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="endTime"
                       name="endTime"
@@ -375,7 +375,7 @@ export function KegiatanForm({ kegiatan, userRole }: KegiatanFormProps) {
               ) : (
                 <>
                   <Upload className="mr-2 h-4 w-4" />
-                  Simpan Kegiatan
+                  Simpan
                 </>
               )}
             </Button>

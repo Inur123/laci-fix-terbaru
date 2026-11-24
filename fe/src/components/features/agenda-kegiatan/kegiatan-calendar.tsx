@@ -30,7 +30,7 @@ interface KegiatanCalendarProps {
 
 type PHBIResponse = {
   success?: boolean;
-  holidays?: Array<{ date: string; description: string }>;
+  holidays?: Array<{ date: string; description?: string; name?: string }>;
 };
 
 export function KegiatanCalendar({ kegiatanList }: KegiatanCalendarProps) {
@@ -53,13 +53,17 @@ export function KegiatanCalendar({ kegiatanList }: KegiatanCalendarProps) {
         const yearsToFetch = [currentYear, currentYear + 1];
 
         const promises = yearsToFetch.map(async (year) => {
-          const response = await fetch(`/api/public/phbi?year=${year}`, {
-            signal: controller.signal,
-          });
-          if (!response.ok) {
-            throw new Error(`PHBI ${year} gagal dimuat`);
+          try {
+            const response = await fetch(`/api/public/phbi?year=${year}`, {
+              signal: controller.signal,
+            });
+            if (!response.ok) {
+              return { success: false, holidays: [] } as PHBIResponse;
+            }
+            return (await response.json()) as PHBIResponse;
+          } catch {
+            return { success: false, holidays: [] } as PHBIResponse;
           }
-          return (await response.json()) as PHBIResponse;
         });
 
         const results = await Promise.all(promises);
@@ -70,7 +74,7 @@ export function KegiatanCalendar({ kegiatanList }: KegiatanCalendarProps) {
             result.holidays.forEach((holiday) => {
               holidays.push({
                 id: `phbi-${holiday.date}`,
-                title: holiday.description,
+                title: holiday.name || holiday.description || "Hari Libur Nasional",
                 start: new Date(holiday.date),
                 allDay: true,
                 backgroundColor: "#7c3aed",

@@ -1,166 +1,125 @@
-"use client";
+import { FileText } from "lucide-react";
 
-import { PublicLayout } from "@/components/features/home/home-client";
+import { LegalPageShell } from "@/components/features/public-v2/legal-page-shell";
 
 const sections = [
   {
-    title: "1. Penerimaan Ketentuan",
-    content: `Dengan mengakses atau menggunakan platform Laci Digital ("Platform"), Anda menyatakan telah membaca, memahami, dan menyetujui Ketentuan Penggunaan ini. Jika Anda tidak menyetujui ketentuan ini, Anda tidak diizinkan untuk menggunakan Platform.
+    title: "1. Ruang Lingkup",
+    content: `Ketentuan ini berlaku saat Anda mengakses atau menggunakan Laci Digital, sistem administrasi internal PC IPNU IPPNU Kabupaten Magetan.
 
-Laci Digital adalah sistem informasi manajemen organisasi internal yang dikembangkan dan dikelola oleh PC IPNU IPPNU Kabupaten Magetan.`,
+Dengan menggunakan Laci Digital, Anda menyatakan telah membaca dan menyetujui ketentuan ini serta Kebijakan Privasi. Jika tidak setuju, jangan membuat akun, login, atau memasukkan data ke sistem.`,
   },
   {
-    title: "2. Eligibilitas dan Hak Akses Pengguna",
-    content: `Laci Digital dirancang eksklusif untuk penggunaan internal PC IPNU IPPNU Kabupaten Magetan. Anda hanya diizinkan menggunakan Platform apabila:
+    title: "2. Pengguna dan Peran",
+    content: `Laci Digital digunakan oleh pengurus yang diberi kewenangan sebagai Sekretaris Cabang atau Sekretaris PAC.
 
-• Anda merupakan pengurus aktif PC IPNU IPPNU Kabupaten Magetan yang telah mendaftarkan akun.
-• Akun Anda telah berhasil melakukan verifikasi email.
-• Anda menggunakan Platform sesuai peran yang ditetapkan (Sekretaris Cabang atau Sekretaris PAC).
+Sekretaris Cabang mengelola administrasi tingkat cabang, akun PAC, agenda kegiatan, Berkas SP, log email, dan backup database.
 
-Platform berhak menolak atau mencabut hak akses kapan saja jika terdapat pelanggaran ketentuan ini.`,
+Sekretaris PAC mengelola data PAC-nya, termasuk anggota, arsip, berkas pimpinan, presensi, periode, serta pengajuan ke Cabang.
+
+Peserta kegiatan dapat mengisi presensi melalui tautan publik atau QR tanpa memperoleh akses ke dashboard.`,
   },
   {
-    title: "3. Peran Pengguna dan Batasan Akses",
-    content: `Terdapat dua peran pengguna dengan perbedaan hak akses:
+    title: "3. Pendaftaran, Verifikasi, dan Aktivasi",
+    content: `Pendaftaran umum membuat akun Sekretaris PAC dalam keadaan belum aktif. Pengguna harus memverifikasi email dengan kode OTP 6 digit. Kode berlaku selama 5 menit dan kode baru menggantikan kode sebelumnya.
 
-Sekretaris Cabang:
-• Akses penuh ke seluruh fitur Platform
-• Dapat mengelola akun pengguna lain (aktivasi, reset password)
-• Dapat mengelola Kegiatan, Berkas SP, dan Data User
-• Dapat mengantau dan mencatat Presensi Kegiatan
-• Dapat menerima/menolak Pengajuan PAC
+Verifikasi email tidak otomatis mengaktifkan akun. Sekretaris Cabang harus memeriksa dan mengaktifkan akun melalui Manajemen User.
 
-Sekretaris PAC:
-• Dapat membuat dan memantau Pengajuan PAC
-• Dapat mengelola Data Anggota di PAC-nya
-• Dapat melakukan presensi kegiatan yang diselenggarakan PAC
-• Tidak memiliki akses ke fitur manajemen pengguna dan berkas SP cabang
-
-Pengguna yang belum memverifikasi email hanya dapat mengakses halaman Dashboard utama dan Profil.`,
+Pendaftaran hanya tersedia ketika akun Cabang dan periode Cabang yang aktif sudah tersedia. Pengguna wajib memberikan nama dan alamat email yang benar serta tidak boleh mendaftarkan akun atas nama orang lain tanpa kewenangan.`,
   },
   {
-    title: "4. Akun dan Keamanan",
-    content: `Anda bertanggung jawab penuh atas:
+    title: "4. Login dan Keamanan Akun",
+    content: `Pengguna bertanggung jawab menjaga password dan perangkat yang dipakai untuk mengakses Laci Digital. Jangan membagikan password, kode OTP, cookie sesi, atau password sementara.
 
-• Kerahasiaan kata sandi dan kredensial akun Anda.
-• Seluruh aktivitas yang dilakukan menggunakan akun Anda.
-• Segera menghubungi Sekretaris Cabang jika menduga akun Anda diakses secara tidak sah.
+Login dengan Google hanya dapat dipakai oleh email yang sudah terdaftar dan akun yang sudah aktif. Fitur ini tidak membuat akun baru.
 
-Anda dilarang membagikan kredensial akun kepada pihak lain. Setiap akun hanya boleh digunakan oleh satu orang yang berwenang.
+Sistem meminta lokasi browser saat login untuk mencatat keamanan aktivitas. Jika izin lokasi tidak diberikan, login tidak dapat dilanjutkan.
 
-Reset password tidak dapat dilakukan secara mandiri — hanya dapat dilakukan oleh Sekretaris Cabang melalui menu Data User di dashboard.`,
+Jika akun diduga diakses pihak lain, segera hubungi Sekretaris Cabang untuk menonaktifkan akun atau mereset password. Reset password mengakhiri seluruh sesi lama akun tersebut.`,
   },
   {
-    title: "5. Penggunaan yang Diizinkan",
-    content: `Platform ini boleh Anda gunakan untuk:
+    title: "5. Hak Akses dan Batas Kewenangan",
+    content: `Pengguna hanya boleh membaca, menambah, mengubah, mengunduh, mengekspor, atau menghapus data yang berada dalam kewenangan perannya.
 
-• Membuat dan memantau Pengajuan PAC sesuai peran Anda.
-• Mengarsipkan surat masuk dan keluar dalam fitur Arsip Surat.
-• Menyimpan dan mengelola Berkas Pimpinan.
-• Mengelola Data Anggota organisasi.
-• Memantau kegiatan dan mencatat presensi.
-• Mengelola Periode Kepengurusan.
-• Memantau Riwayat Aktivitas untuk keperluan audit internal.
-• Melaporkan bug atau masalah teknis melalui tombol Laporkan Bug di sidebar.`,
+Sekretaris PAC tidak boleh mencoba mengakses data PAC lain, fungsi Cabang, backup, log email, atau manajemen akun.
+
+Sekretaris Cabang dapat mengakses data lintas PAC hanya melalui fitur yang memang tersedia bagi peran Cabang. Hak akses Cabang harus digunakan untuk kepentingan administrasi dan pengawasan organisasi.`,
   },
   {
-    title: "6. Larangan Penggunaan",
-    content: `Anda dilarang untuk:
+    title: "6. Data Organisasi dan Periode",
+    content: `Data pada Laci Digital dikelompokkan menurut akun dan periode kepengurusan. Pengguna bertanggung jawab memilih periode yang benar sebelum memasukkan atau mengubah data.
 
-• Menggunakan Platform untuk tujuan di luar kepentingan organisasi PC IPNU IPPNU Kabupaten Magetan.
-• Mencoba mengakses fitur atau data di luar wewenang peran Anda.
-• Mengunggah berkas yang mengandung konten berbahaya atau melanggar hukum.
-• Melakukan tindakan yang dapat mengganggu atau merusak sistem Platform.
-• Mendistribusikan, menyalin, atau menjual data dari Platform tanpa izin.
-• Menyebarkan informasi yang bersifat SARA, fitnah, atau melanggar hukum Indonesia.`,
+Perubahan periode aktif memengaruhi data dan statistik yang ditampilkan. Fitur salin anggota membuat data baru pada periode tujuan dan tidak menghapus data sumber.
+
+Menghapus periode dapat menghapus arsip, anggota, berkas, pengajuan, agenda, presensi, dan riwayat yang terhubung melalui relasi database. Periksa ringkasan serta konfirmasi sebelum menjalankan penghapusan.`,
   },
   {
-    title: "7. Data dan Berkas yang Diunggah",
-    content: `Data dan berkas yang Anda unggah ke Platform (termasuk surat, dokumen, foto profil, dan informasi anggota) merupakan milik dan tanggung jawab PC IPNU IPPNU Kabupaten Magetan.
+    title: "7. Berkas dan Konten yang Diunggah",
+    content: `Pengguna hanya boleh mengunggah dokumen dan foto yang sah, relevan dengan kegiatan organisasi, dan berada dalam kewenangannya.
 
-Dengan mengunggah konten, Anda menyatakan bahwa konten tersebut:
-• Tidak melanggar hak cipta atau privasi pihak lain.
-• Merupakan data yang sah dan valid sesuai kepentingan organisasi.
+Sistem memeriksa ukuran, ekstensi, dan isi file. Dokumen menerima format PDF, Word, atau PowerPoint sesuai batas yang ditampilkan pada form. Foto menerima format gambar yang didukung.
 
-Seluruh aktivitas unggah dan pengelolaan berkas tercatat dalam Riwayat Aktivitas untuk keperluan audit internal.`,
+Pengguna dilarang mengunggah malware, dokumen palsu, konten yang melanggar hukum, atau data pribadi yang tidak diperlukan. Pengguna bertanggung jawab memastikan organisasi berhak menyimpan dan memproses berkas tersebut.`,
   },
   {
-    title: "8. Ketersediaan Layanan",
-    content: `Laci Digital berupaya menjaga ketersediaan Platform 24 jam sehari, 7 hari seminggu. Namun, Platform dapat mengalami downtime karena:
+    title: "8. Pengajuan, Presensi, dan Notifikasi",
+    content: `Sekretaris PAC bertanggung jawab atas isi dan file Pengajuan Berkas yang dikirim ke Cabang. Sekretaris Cabang dapat menerima atau menolak pengajuan berdasarkan pemeriksaan administrasi. Alasan penolakan harus digunakan untuk menjelaskan koreksi yang diperlukan.
 
-• Pemeliharaan dan pembaruan sistem yang dijadwalkan.
-• Gangguan teknis atau keadaan di luar kendali tim pengembang.
+Presensi hanya boleh dipakai untuk kegiatan organisasi yang sah. Pengurus bertanggung jawab menetapkan jadwal, membuka atau menutup sesi, dan menjaga QR atau tautan presensi dari penggunaan yang tidak semestinya.
 
-Laci Digital tidak bertanggung jawab atas kerugian akibat ketidaktersediaan sementara Platform.`,
+Sistem dapat mengirim email untuk OTP, hasil verifikasi, pengajuan baru, dan perubahan status. Keterlambatan atau kegagalan email dapat terjadi jika layanan SMTP atau jaringan sedang bermasalah.`,
   },
   {
-    title: "9. Pelanggaran dan Sanksi",
-    content: `Pelanggaran terhadap ketentuan ini dapat mengakibatkan:
+    title: "9. Larangan",
+    content: `Pengguna dilarang:
 
-• Peringatan kepada pengguna yang bersangkutan.
-• Penonaktifan sementara akun oleh Sekretaris Cabang.
-• Pencabutan hak akses secara permanen.
-• Pelaporan kepada pihak berwenang jika pelanggaran bersifat pidana.
-
-Sekretaris Cabang memiliki wewenang untuk mengaktifkan, menonaktifkan, atau menghapus akun pengguna kapan saja melalui menu Data User.`,
+• mencoba melewati autentikasi, pembatasan peran, atau kepemilikan data;
+• mengganggu API, realtime, database, object storage, atau layanan email;
+• menggunakan akun orang lain atau membagikan kredensial;
+• memasukkan data palsu, memanipulasi presensi, atau mengubah status pengajuan tanpa kewenangan;
+• menyebarkan hasil ekspor, backup, data anggota, atau berkas organisasi kepada pihak yang tidak berwenang;
+• memakai Laci Digital untuk kepentingan di luar administrasi PC IPNU IPPNU Kabupaten Magetan.`,
   },
   {
-    title: "10. Perubahan Ketentuan",
-    content: `Laci Digital berhak memperbarui Ketentuan Penggunaan ini kapan saja. Perubahan akan diberitahukan melalui Platform atau email yang terdaftar. Penggunaan Platform setelah pembaruan dianggap sebagai penerimaan atas ketentuan yang baru.`,
-  },
-  {
-    title: "11. Hukum yang Berlaku",
-    content: `Ketentuan Penggunaan ini tunduk pada hukum yang berlaku di Republik Indonesia. Segala sengketa diselesaikan secara musyawarah mufakat, atau melalui jalur hukum di wilayah Kabupaten Magetan, Jawa Timur.`,
-  },
-  {
-    title: "12. Kontak",
-    content: `Pertanyaan mengenai Ketentuan Penggunaan dapat disampaikan melalui:
+    title: "10. Penghapusan dan Backup",
+    content: `Penghapusan data dari aplikasi bersifat permanen. File terkait akan ikut dihapus dari object storage apabila proses penyimpanan tersedia.
 
-Email     : lacipelajarnumagetan@gmail.com
-WhatsApp  : +62 858-5051-2135
-Alamat    : Magetan, Jawa Timur, Indonesia`,
+Sekretaris Cabang dapat menghapus akun PAC. Relasi database membuat data yang terhubung dengan akun tersebut ikut terhapus.
+
+Backup database baru dienkripsi dan sistem menyimpan hingga 10 backup terbaru. Karena itu, salinan data yang sudah dihapus dari data aktif dapat tetap berada dalam backup sampai backup tersebut terhapus oleh rotasi.`,
+  },
+  {
+    title: "11. Ketersediaan dan Perubahan Layanan",
+    content: `Laci Digital bergantung pada koneksi internet, database, object storage R2, layanan email, Google OAuth, reCAPTCHA, dan beberapa layanan data eksternal. Pengelola berusaha menjaga layanan tetap tersedia, tetapi tidak menjamin layanan bebas gangguan setiap saat.
+
+Pengelola dapat melakukan pemeliharaan, memperbaiki keamanan, mengubah fitur, atau membatasi akses saat diperlukan. Perubahan ketentuan yang memengaruhi pengguna akan ditampilkan melalui sistem atau sarana komunikasi organisasi.`,
+  },
+  {
+    title: "12. Pelanggaran dan Kontak",
+    content: `Sekretaris Cabang dapat menonaktifkan atau menghapus akun PAC yang melanggar ketentuan, menggunakan data tanpa kewenangan, atau membahayakan sistem. Tindakan organisasi atau hukum lain dapat dilakukan sesuai tingkat pelanggaran.
+
+Pertanyaan mengenai ketentuan ini dapat disampaikan melalui:
+
+Email: lacipelajarnumagetan@gmail.com
+WhatsApp: +62 858-5051-2135
+Lokasi: Magetan, Jawa Timur, Indonesia`,
   },
 ];
 
-export default function KetentuanClient() {
+export default function KetentuanClient({
+  isAuthenticated = false,
+}: {
+  isAuthenticated?: boolean;
+}) {
   return (
-    <PublicLayout>
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#bbf7d0] bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#15803d] mb-4">
-            Legal
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Ketentuan Penggunaan
-          </h1>
-          <p className="mt-3 text-sm text-slate-500">
-            Terakhir diperbarui:{" "}
-            <span className="font-medium text-slate-700">11 Maret 2026</span>
-          </p>
-          <p className="mt-4 text-slate-600 leading-relaxed">
-            Harap baca ketentuan ini dengan seksama sebelum menggunakan platform
-            Laci Digital. Dengan mengakses Platform, Anda menyetujui ketentuan
-            yang tercantum di bawah ini.
-          </p>
-        </div>
-
-        <div className="h-px bg-slate-200 mb-10" />
-
-        {/* Sections */}
-        <div className="space-y-8">
-          {sections.map((section) => (
-            <section key={section.title}>
-              <h2 className="text-base font-bold text-slate-900 mb-3">
-                {section.title}
-              </h2>
-              <div className="text-sm leading-relaxed text-slate-600 whitespace-pre-line rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
-                {section.content}
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
-    </PublicLayout>
+    <LegalPageShell
+      badge="Legal"
+      title="Ketentuan Penggunaan"
+      description="Aturan ini menjelaskan siapa yang dapat menggunakan Laci Digital, batas akses setiap peran, serta tanggung jawab saat mengelola data organisasi."
+      updatedAt="30 Oktober 2026"
+      icon={FileText}
+      sections={sections}
+      isAuthenticated={isAuthenticated}
+    />
   );
 }

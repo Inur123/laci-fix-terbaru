@@ -230,7 +230,7 @@ export function UserList({
             Cari User
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="user-search"
               placeholder="Cari nama atau email..."
@@ -489,13 +489,13 @@ export function UserList({
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 border-slate-200 p-0 text-slate-500 transition-colors hover:text-slate-900 sm:h-8 sm:w-8"
+                            className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                             asChild
+                            title={`Lihat detail ${capitalizeName(user.name)}`}
                           >
                             <Link
                               href={`/dashboard/manajemen-user/${user.id}`}
                               aria-label={`Lihat detail ${capitalizeName(user.name)}`}
-                              title={`Lihat detail ${capitalizeName(user.name)}`}
                             >
                               <Eye className="w-4 h-4" />
                             </Link>

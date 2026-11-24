@@ -427,17 +427,17 @@ func (a *API) publicPHBI(w http.ResponseWriter, r *http.Request) {
 		writeError(w, 400, "INVALID_YEAR", "Tahun tidak valid")
 		return
 	}
-	endpoint := "https://api-hari-libur.vercel.app/api?year=" + url.QueryEscape(year)
+	endpoint := "https://tanggalmerah.upset.dev/api/holidays?year=" + url.QueryEscape(year)
 	request, _ := http.NewRequestWithContext(r.Context(), http.MethodGet, endpoint, nil)
 	response, err := outboundClient.Do(request)
 	if err != nil {
-		writeError(w, 502, "UPSTREAM_ERROR", "Gagal mengambil data kalender nasional")
+		writeJSON(w, 200, map[string]any{"success": false, "year": year, "holidays": []any{}})
 		return
 	}
 	defer response.Body.Close()
 	var payload any
 	if response.StatusCode >= 300 || json.NewDecoder(io.LimitReader(response.Body, 1<<20)).Decode(&payload) != nil {
-		writeError(w, 502, "UPSTREAM_ERROR", "Gagal mengambil data kalender nasional")
+		writeJSON(w, 200, map[string]any{"success": false, "year": year, "holidays": []any{}})
 		return
 	}
 	holidays := payload
@@ -448,7 +448,7 @@ func (a *API) publicPHBI(w http.ResponseWriter, r *http.Request) {
 			holidays = nested
 		}
 	}
-	writeJSON(w, 200, map[string]any{"success": true, "year": year, "source": "https://github.com/andifahruddinakas/api-hari-libur", "holidays": holidays})
+	writeJSON(w, 200, map[string]any{"success": true, "year": year, "source": "https://tanggalmerah.upset.dev", "holidays": holidays})
 }
 
 func (a *API) publicData(w http.ResponseWriter, r *http.Request) {

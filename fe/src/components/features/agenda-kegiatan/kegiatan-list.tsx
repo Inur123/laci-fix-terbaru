@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/pagination";
 import Link from "next/link";
 import {
+  Eye,
   Pencil,
   Trash2,
   Search,
@@ -384,7 +385,7 @@ export function KegiatanList({
             Cari Kegiatan
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="agenda-search"
               placeholder="Cari judul atau lokasi..."
@@ -561,7 +562,7 @@ export function KegiatanList({
                       <SortIcon col="status" />
                     </button>
                   </TableHead>
-                  <TableHead className="w-[100px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -689,18 +690,32 @@ export function KegiatanList({
                               {statusConfig[item.status]?.label || item.status}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex items-center justify-end gap-2 text-right">
+                          <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
+                            <div className="flex items-center justify-end gap-2">
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="min-h-11 min-w-11 p-0 cursor-pointer"
+                                className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                                 asChild
+                                title={`Lihat detail ${capitalizeName(item.judul)}`}
+                              >
+                                <Link
+                                  href={`/dashboard/agenda-kegiatan/${item.id}`}
+                                  aria-label={`Lihat detail ${capitalizeName(item.judul)}`}
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </Link>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-11 w-11 p-0 sm:h-8 sm:w-8"
+                                asChild
+                                title={`Edit ${capitalizeName(item.judul)}`}
                               >
                                 <Link
                                   href={`/dashboard/agenda-kegiatan/${item.id}/edit`}
                                   aria-label={`Edit ${capitalizeName(item.judul)}`}
-                                  title={`Edit ${capitalizeName(item.judul)}`}
                                 >
                                   <Pencil className="w-4 h-4" />
                                 </Link>
@@ -708,10 +723,10 @@ export function KegiatanList({
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="min-h-11 min-w-11 p-0 text-red-500 hover:text-red-600 cursor-pointer"
+                                className="h-11 w-11 p-0 text-red-500 hover:text-red-600 sm:h-8 sm:w-8"
                                 onClick={() => setConfirmDeleteId(item.id)}
-                                aria-label={`Hapus ${capitalizeName(item.judul)}`}
                                 title={`Hapus ${capitalizeName(item.judul)}`}
+                                aria-label={`Hapus ${capitalizeName(item.judul)}`}
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import HomeClient from "@/components/features/home/home-client";
 import { getPublicStats } from "@/app/actions/dashboard-actions";
+import { publicFont } from "@/lib/public-font";
 
 export const dynamic = "force-dynamic";
 
@@ -11,13 +12,15 @@ export default async function Home() {
   const { anggotaCount, suratCount } = await getPublicStats();
 
   return (
-    <HomeClient
-      session={session}
-      stats={{
-        anggotaTerdaftar: anggotaCount,
-        suratDiproses: suratCount,
-      }}
-    />
+    <div className={publicFont.className}>
+      <HomeClient
+        session={session}
+        stats={{
+          anggotaTerdaftar: anggotaCount,
+          suratDiproses: suratCount,
+        }}
+      />
+    </div>
   );
 }
 

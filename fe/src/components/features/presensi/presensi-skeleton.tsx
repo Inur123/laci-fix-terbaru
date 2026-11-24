@@ -52,7 +52,7 @@ export function PresensiListSkeleton() {
                 <TableHead className="w-[180px] bg-slate-50/40">Tempat</TableHead>
                 <TableHead className="w-[90px] text-center bg-slate-50/40">Peserta</TableHead>
                 <TableHead className="w-[130px] bg-slate-50/40">Status</TableHead>
-                <TableHead className="w-[80px] text-right bg-slate-50/40 pr-6">Aksi</TableHead>
+                <TableHead className="w-[80px] sm:w-[60px] text-right bg-slate-50/40 pr-4 sm:pr-6">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -82,8 +82,8 @@ export function PresensiListSkeleton() {
                   <TableCell>
                     <Skeleton className="h-6 w-20 rounded-full" />
                   </TableCell>
-                  <TableCell className="text-right pr-6">
-                    <Skeleton className="h-8 w-8 ml-auto rounded-md" />
+                  <TableCell className="w-[80px] sm:w-[60px] text-right pr-4 sm:pr-6">
+                    <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 ml-auto rounded-md" />
                   </TableCell>
                 </TableRow>
               ))}

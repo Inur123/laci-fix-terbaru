@@ -325,7 +325,7 @@ export function ReferensiPengajuanList({
         <div className="flex-1 relative w-full">
           <Label className="text-xs font-medium mb-1 block">Cari Surat</Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="No Surat, keperluan, atau pengaju..."
               className="pl-9 w-full h-9 text-sm bg-white"
@@ -470,7 +470,7 @@ export function ReferensiPengajuanList({
                       <SortIcon col="status" />
                     </span>
                   </TableHead>
-                  <TableHead className="w-[60px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[100px] sm:w-[80px] text-right bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -552,7 +552,7 @@ export function ReferensiPengajuanList({
                             ]?.label || item.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="w-[100px] sm:w-[80px] text-right pr-4 sm:pr-6">
                           <Button
                             size="icon"
                             variant="outline"

@@ -97,6 +97,7 @@ export function PresensiDetail({
     | "organisasi"
     | "createdAt"
     | "tingkat"
+    | "asalPimpinan"
     | "jabatan";
   type AttSortDir = "asc" | "desc";
   const [attSortKey, setAttSortKey] = useState<AttSortKey | null>("createdAt");
@@ -318,6 +319,7 @@ export function PresensiDetail({
       "Nama Lengkap": item.namaLengkap,
       Organisasi: item.organisasi === "UMUM" ? "Eksternal" : item.organisasi,
       Tingkat: item.tingkat || "-",
+      "Asal Pimpinan": item.asalPimpinan || "-",
       Instansi: item.instansi || "-",
       Jabatan: item.jabatan || "-",
       "Waktu Absen": new Date(item.createdAt).toLocaleString("id-ID", {
@@ -624,7 +626,7 @@ export function PresensiDetail({
                   Cari Peserta
                 </Label>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     placeholder="Cari nama, organisasi, atau jabatan..."
                     className="pl-9 w-full bg-white h-9 text-sm border-slate-200"
@@ -671,14 +673,14 @@ export function PresensiDetail({
 
             <div className="rounded-md border">
               <div className="relative overflow-auto max-h-[600px]">
-                <Table className="min-w-[700px]">
+                <Table className="w-full min-w-[960px] table-fixed">
                   <TableHeader className="sticky top-0 bg-white z-10 h-11">
                     <TableRow>
                       <TableHead className="w-[50px] text-center bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11">
                         No
                       </TableHead>
                       <TableHead
-                        className="bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
+                        className="w-[200px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
                         aria-sort={
                           attSortKey === "namaLengkap"
                             ? attSortDir === "asc"
@@ -716,7 +718,7 @@ export function PresensiDetail({
                         </button>
                       </TableHead>
                       <TableHead
-                        className="w-[130px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
+                        className="w-[110px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
                         aria-sort={
                           attSortKey === "tingkat"
                             ? attSortDir === "asc"
@@ -735,7 +737,26 @@ export function PresensiDetail({
                         </button>
                       </TableHead>
                       <TableHead
-                        className="bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
+                        className="w-[160px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
+                        aria-sort={
+                          attSortKey === "asalPimpinan"
+                            ? attSortDir === "asc"
+                              ? "ascending"
+                              : "descending"
+                            : "none"
+                        }
+                      >
+                        <button
+                          type="button"
+                          className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                          onClick={() => handleAttSort("asalPimpinan")}
+                        >
+                          Asal Pimpinan
+                          <AttSortIcon col="asalPimpinan" />
+                        </button>
+                      </TableHead>
+                      <TableHead
+                        className="w-[210px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
                         aria-sort={
                           attSortKey === "jabatan"
                             ? attSortDir === "asc"
@@ -784,7 +805,8 @@ export function PresensiDetail({
                           item.organisasi?.toLowerCase().includes(q) ||
                           item.jabatan?.toLowerCase().includes(q) ||
                           item.instansi?.toLowerCase().includes(q) ||
-                          item.tingkat?.toLowerCase().includes(q)
+                          item.tingkat?.toLowerCase().includes(q) ||
+                          item.asalPimpinan?.toLowerCase().includes(q)
                         );
                       });
 
@@ -823,7 +845,7 @@ export function PresensiDetail({
                         return (
                           <TableRow>
                             <TableCell
-                              colSpan={6}
+                              colSpan={7}
                               className="h-32 text-center text-muted-foreground"
                             >
                               {searchTerm
@@ -836,56 +858,79 @@ export function PresensiDetail({
 
                       return (
                         <>
-                          {visibleData.map((item: any, index: number) => (
-                            <TableRow
-                              key={item.id}
-                              className="hover:bg-slate-50/50"
-                            >
-                              <TableCell className="text-center font-medium text-muted-foreground whitespace-nowrap">
-                                {(currentPage - 1) * itemsPerPage + index + 1}
-                              </TableCell>
-                              <TableCell className="font-bold text-slate-900 capitalize">
-                                {capitalizeName(item.namaLengkap)}
-                              </TableCell>
-                              <TableCell className="whitespace-nowrap">
-                                <Badge
-                                  variant="outline"
-                                  className={cn(
-                                    "font-semibold",
-                                    item.organisasi === "IPNU"
-                                      ? "bg-emerald-100/80 text-emerald-700 border-emerald-200"
-                                      : item.organisasi === "IPPNU"
-                                        ? "bg-rose-100/80 text-rose-700 border-rose-200"
-                                        : "bg-slate-100/80 text-slate-700 border-slate-200",
-                                  )}
+                          {visibleData.map((item: any, index: number) => {
+                            const formattedName = capitalizeName(
+                              item.namaLengkap,
+                            );
+                            const roleText =
+                              item.organisasi === "UMUM"
+                                ? item.instansi
+                                : item.jabatan;
+                            const formattedRole = capitalizeName(roleText);
+
+                            return (
+                              <TableRow
+                                key={item.id}
+                                className="hover:bg-slate-50/50"
+                              >
+                                <TableCell className="text-center font-medium text-muted-foreground whitespace-nowrap">
+                                  {(currentPage - 1) * itemsPerPage + index + 1}
+                                </TableCell>
+                                <TableCell
+                                  className="font-bold text-slate-900 capitalize truncate"
+                                  title={formattedName}
                                 >
-                                  {item.organisasi === "UMUM"
-                                    ? "Eksternal"
-                                    : item.organisasi}
-                                </Badge>
-                              </TableCell>
-                              <TableCell className="whitespace-nowrap">
-                                {item.tingkat || "-"}
-                              </TableCell>
-                              <TableCell className="text-slate-600 text-sm">
-                                {capitalizeName(
-                                  item.organisasi === "UMUM"
-                                    ? item.instansi
-                                    : item.jabatan,
-                                )}
-                              </TableCell>
-                              <TableCell className="text-center text-xs text-muted-foreground whitespace-nowrap">
-                                {format(new Date(item.createdAt), "HH:mm:ss", {
-                                  locale: id,
-                                })}
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                                  {formattedName}
+                                </TableCell>
+                                <TableCell className="whitespace-nowrap">
+                                  <Badge
+                                    variant="outline"
+                                    className={cn(
+                                      "font-semibold",
+                                      item.organisasi === "IPNU"
+                                        ? "bg-emerald-100/80 text-emerald-700 border-emerald-200"
+                                        : item.organisasi === "IPPNU"
+                                          ? "bg-rose-100/80 text-rose-700 border-rose-200"
+                                          : "bg-slate-100/80 text-slate-700 border-slate-200",
+                                    )}
+                                  >
+                                    {item.organisasi === "UMUM"
+                                      ? "Eksternal"
+                                      : item.organisasi}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell className="whitespace-nowrap font-medium text-slate-800">
+                                  {item.tingkat || "-"}
+                                </TableCell>
+                                <TableCell
+                                  className="text-slate-700 font-medium text-sm truncate"
+                                  title={item.asalPimpinan || "-"}
+                                >
+                                  {item.asalPimpinan || "-"}
+                                </TableCell>
+                                <TableCell
+                                  className="text-slate-600 text-sm truncate"
+                                  title={formattedRole || "-"}
+                                >
+                                  {formattedRole || "-"}
+                                </TableCell>
+                                <TableCell className="text-center text-xs text-muted-foreground whitespace-nowrap">
+                                  {format(
+                                    new Date(item.createdAt),
+                                    "HH:mm:ss",
+                                    {
+                                      locale: id,
+                                    },
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
 
                           {/* Pagination Row - Consistent with other modules */}
                           {totalPages >= 1 && (
                             <TableRow className="hover:bg-transparent border-t bg-slate-50/30">
-                              <TableCell colSpan={6} className="p-0">
+                              <TableCell colSpan={7} className="p-0">
                                 <div className="flex items-center justify-between px-4 py-2">
                                   <p className="text-xs text-muted-foreground hidden sm:block">
                                     Menampilkan{" "}

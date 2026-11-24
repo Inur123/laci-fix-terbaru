@@ -5,6 +5,7 @@ export const metadata: Metadata = {
 };
 
 import RecaptchaProvider from "@/components/providers/recaptcha-provider";
+import { publicFont } from "@/lib/public-font";
 
 export default function AuthLayout({
   children,
@@ -13,7 +14,11 @@ export default function AuthLayout({
 }) {
   return (
     <RecaptchaProvider>
-      <div className="min-h-screen bg-white antialiased">{children}</div>
+      <div
+        className={`${publicFont.className} public-auth-shell min-h-screen bg-white antialiased`}
+      >
+        {children}
+      </div>
     </RecaptchaProvider>
   );
 }

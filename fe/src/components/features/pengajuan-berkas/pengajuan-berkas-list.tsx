@@ -545,8 +545,10 @@ export function PengajuanBerkasList({
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col md:flex-row gap-4 mb-6 items-end">
-        <div className="flex-1 relative w-full">
+      {/* Filter Section */}
+      <div className="flex flex-wrap xl:flex-nowrap gap-4 mb-6 items-end">
+        {/* Search */}
+        <div className="w-full xl:w-auto xl:flex-1 relative">
           <Label
             htmlFor="pengajuan-search"
             className="text-xs font-medium mb-1 block"
@@ -554,7 +556,7 @@ export function PengajuanBerkasList({
             Cari Surat
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="pengajuan-search"
               placeholder="Contoh: Surat Rekomendasi"
@@ -565,7 +567,8 @@ export function PengajuanBerkasList({
           </div>
         </div>
 
-        <div className="w-full md:w-36">
+        {/* Status */}
+        <div className="w-[calc(50%-8px)] sm:w-auto sm:flex-1 sm:min-w-[130px] xl:flex-none xl:w-36">
           <Label
             htmlFor="pengajuan-status-filter"
             className="text-xs font-medium mb-1 block"
@@ -592,7 +595,8 @@ export function PengajuanBerkasList({
           </Select>
         </div>
 
-        <div className="w-full md:w-36">
+        {/* Penerima */}
+        <div className="w-[calc(50%-8px)] sm:w-auto sm:flex-1 sm:min-w-[130px] xl:flex-none xl:w-36">
           <Label
             htmlFor="pengajuan-penerima-filter"
             className="text-xs font-medium mb-1 block"
@@ -620,8 +624,9 @@ export function PengajuanBerkasList({
           </Select>
         </div>
 
+        {/* Filter PAC */}
         {isCabangView && pacUsers && pacUsers.length > 0 && (
-          <div className="w-full md:w-64">
+          <div className="w-full sm:w-auto sm:flex-[1.4] sm:min-w-[180px] xl:flex-none xl:w-64">
             <Label className="text-xs font-medium mb-1 block">Filter PAC</Label>
             <UserFilterSelect
               users={pacUsers}
@@ -633,11 +638,12 @@ export function PengajuanBerkasList({
           </div>
         )}
 
+        {/* Buttons */}
         <div
           className={cn(
-            "grid gap-2 w-full",
+            "grid gap-2 w-full sm:w-auto shrink-0",
             showExport
-              ? "grid-cols-2 md:flex md:w-auto md:items-center md:justify-end md:gap-4 lg:justify-start"
+              ? "grid-cols-2 sm:flex sm:items-center sm:gap-2"
               : "grid-cols-1",
           )}
         >
@@ -645,7 +651,7 @@ export function PengajuanBerkasList({
             <Button
               variant="outline"
               aria-label={`Export ${totalItems} data pengajuan ke Excel`}
-              className="min-h-11 w-full md:w-auto px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap text-slate-600 hover:text-slate-900"
+              className="min-h-11 w-full sm:w-auto px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap text-slate-600 hover:text-slate-900"
               onClick={handleExportExcel}
             >
               <FileSpreadsheet
@@ -663,7 +669,7 @@ export function PengajuanBerkasList({
             variant="outline"
             aria-label="Reset filter pengajuan"
             className={cn(
-              "min-h-11 w-full md:w-auto px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap transition-all duration-200",
+              "min-h-11 w-full sm:w-auto px-4 text-sm bg-white border-slate-200 shadow-sm whitespace-nowrap transition-all duration-200",
               hasFilters
                 ? "text-slate-900 border-slate-300 opacity-100"
                 : "text-slate-400 border-slate-200 opacity-50 cursor-not-allowed",
@@ -686,7 +692,7 @@ export function PengajuanBerkasList({
         )}
         <div className="rounded-md border">
           <div className="overflow-x-auto">
-            <Table className="w-full min-w-[1000px] table-fixed [&_td]:py-2 [&_th]:py-2">
+            <Table className="w-full min-w-[1050px] sm:min-w-[1000px] table-fixed [&_td]:py-2 [&_th]:py-2">
               <TableHeader className="sticky top-0 bg-white z-10">
                 <TableRow>
                   <TableHead className="w-[40px] bg-slate-50/40 text-center whitespace-nowrap">
@@ -733,7 +739,7 @@ export function PengajuanBerkasList({
                   >
                     {renderSortButton("Status", "status")}
                   </TableHead>
-                  <TableHead className="w-[130px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -840,7 +846,7 @@ export function PengajuanBerkasList({
                             ]?.label || item.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               size="sm"

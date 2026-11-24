@@ -55,8 +55,19 @@
   --color-brand-green-900: var(--brand-green-100);
 }
 
+.public-auth-shell input:autofill,
+.public-auth-shell input:-webkit-autofill,
+.public-auth-shell input:-webkit-autofill:hover,
+.public-auth-shell input:-webkit-autofill:focus {
+  background-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  caret-color: #0f172a;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
 :root {
-  color-scheme: light;
+  color-scheme: only light;
   --radius: 0.75rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -106,10 +117,38 @@
   body {
     background-color: white !important;
     color: black !important;
-    color-scheme: light;
+    color-scheme: only light;
   }
   * {
     @apply border-border outline-ring/50;
+  }
+
+  a[href],
+  button,
+  summary,
+  select,
+  label[for],
+  label:has(> input[type="checkbox"], > input[type="radio"]),
+  [role="button"],
+  [role="link"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"],
+  [role="switch"],
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="file"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  input[type="range"],
+  input[type="color"] {
+    cursor: pointer;
+  }
+
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
   }
 
   /* Deep Force Light Mode even if settings or libraries try to use .dark */
@@ -117,6 +156,49 @@
   [data-theme="dark"] {
     background-color: white !important;
     color: black !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Morph the public header only after browser scroll restoration settles. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-nav-ready="true"] .laci-site-header {
+    transition:
+      padding 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 240ms ease,
+      border-color 240ms ease,
+      box-shadow 300ms ease,
+      backdrop-filter 300ms ease;
+  }
+
+  html[data-nav-ready="true"] .laci-site-header-inner {
+    transition:
+      height 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      max-width 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-radius 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 240ms ease,
+      border-color 240ms ease,
+      box-shadow 300ms ease,
+      backdrop-filter 300ms ease;
+  }
+
+  html[data-nav-ready="true"] .laci-register-arrow {
+    transition:
+      width 260ms ease,
+      margin-left 260ms ease,
+      opacity 180ms ease,
+      transform 260ms ease;
   }
 }
 

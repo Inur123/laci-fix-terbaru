@@ -141,7 +141,7 @@ func (a *API) presensiDetail(w http.ResponseWriter, r *http.Request, includePriv
 	item["open"] = presensiOpen(item)
 	participants := []map[string]any{}
 	if includePrivate {
-		pRows, err := a.db.Query(r.Context(), `SELECT "id","presensiId","namaLengkap","email","noHp","emailHash","noHpHash","organisasi","tingkat","jabatan","instansi","createdAt" FROM "PresensiData" WHERE "presensiId"=$1 ORDER BY "createdAt" DESC, "id" DESC`, id)
+		pRows, err := a.db.Query(r.Context(), `SELECT "id","presensiId","namaLengkap","email","noHp","emailHash","noHpHash","organisasi","tingkat","jabatan","instansi","asalPimpinan","createdAt" FROM "PresensiData" WHERE "presensiId"=$1 ORDER BY "createdAt" DESC, "id" DESC`, id)
 		if err != nil {
 			writeError(w, 500, "DATABASE_ERROR", "Gagal mengambil peserta")
 			return
@@ -290,7 +290,11 @@ func (a *API) submitPresensi(w http.ResponseWriter, r *http.Request) {
 		writeError(w, 400, "PRESENSI_CLOSED", "Presensi sudah ditutup")
 		return
 	}
-	_, err = tx.Exec(r.Context(), `INSERT INTO "PresensiData"("id","presensiId","namaLengkap","email","noHp","emailHash","noHpHash","organisasi","tingkat","jabatan","instansi","createdAt") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,NOW())`, participantID, id, encName, encEmail, encPhone, security.Hash(email), security.Hash(phone), organization, nullable(r.FormValue("tingkat")), nullable(r.FormValue("jabatan")), nullable(r.FormValue("instansi")))
+	asalPimpinan := strings.TrimSpace(r.FormValue("asalPimpinan"))
+	if asalPimpinan == "" {
+		asalPimpinan = strings.TrimSpace(r.FormValue("asal"))
+	}
+	_, err = tx.Exec(r.Context(), `INSERT INTO "PresensiData"("id","presensiId","namaLengkap","email","noHp","emailHash","noHpHash","organisasi","tingkat","jabatan","instansi","asalPimpinan","createdAt") VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())`, participantID, id, encName, encEmail, encPhone, security.Hash(email), security.Hash(phone), organization, nullable(r.FormValue("tingkat")), nullable(r.FormValue("jabatan")), nullable(r.FormValue("instansi")), nullable(asalPimpinan))
 	if err != nil {
 		if isUniqueViolation(err) {
 			writeError(w, 409, "ALREADY_ATTENDED", "Mohon maaf, email atau nomor HP ini sudah absen di kegiatan ini")
@@ -348,7 +352,7 @@ func (a *API) updatePresensiStatus(w http.ResponseWriter, r *http.Request) {
 
 func (a *API) participantDetail(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	rows, err := a.db.Query(r.Context(), `SELECT d."id",d."presensiId",d."namaLengkap",d."email",d."noHp",d."organisasi",d."tingkat",d."jabatan",d."instansi",d."createdAt",p."userId" AS "ownerUserId" FROM "PresensiData" d JOIN "Presensi" p ON p."id"=d."presensiId" WHERE d."id"=$1`, id)
+	rows, err := a.db.Query(r.Context(), `SELECT d."id",d."presensiId",d."namaLengkap",d."email",d."noHp",d."organisasi",d."tingkat",d."jabatan",d."instansi",d."asalPimpinan",d."createdAt",p."userId" AS "ownerUserId" FROM "PresensiData" d JOIN "Presensi" p ON p."id"=d."presensiId" WHERE d."id"=$1`, id)
 	if err != nil {
 		writeError(w, 500, "DATABASE_ERROR", "Gagal mengambil peserta")
 		return

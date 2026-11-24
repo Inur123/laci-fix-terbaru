@@ -650,7 +650,7 @@ func TestPublicUpstreamEndpointsValidateAndMapResponses(t *testing.T) {
 			if form.Get("response") == "low" {
 				body = `{"success":true,"score":0.2}`
 			}
-		case "api-hari-libur.vercel.app":
+		case "api-hari-libur.vercel.app", "tanggalmerah.upset.dev":
 			if r.URL.Query().Get("year") != "2026" {
 				return nil, errors.New("unexpected holiday year")
 			}

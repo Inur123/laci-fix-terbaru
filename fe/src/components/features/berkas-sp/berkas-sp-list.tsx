@@ -397,7 +397,7 @@ export function BerkasSPList({
             Cari Berkas
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="berkas-sp-search"
               placeholder="Cari nama pimpinan atau catatan..."
@@ -457,7 +457,7 @@ export function BerkasSPList({
         <div className="rounded-md border">
           <div className="overflow-x-auto">
             <Table
-              className="w-full min-w-[1150px] table-fixed [&_td]:py-2 [&_th]:py-2"
+              className="w-full min-w-[1200px] sm:min-w-[1150px] table-fixed [&_td]:py-2 [&_th]:py-2"
               aria-busy={isLoading}
             >
               <TableHeader className="sticky top-0 bg-white z-10">
@@ -531,7 +531,7 @@ export function BerkasSPList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[210px] bg-slate-50/40 whitespace-nowrap"
+                    className="w-[210px] bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6"
                     aria-sort={sortState("catatan")}
                   >
                     <button
@@ -543,7 +543,7 @@ export function BerkasSPList({
                       <SortIcon col="catatan" />
                     </button>
                   </TableHead>
-                  <TableHead className="w-[130px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -617,7 +617,7 @@ export function BerkasSPList({
                         <TableCell className="whitespace-nowrap">
                           {getStatusBadge(berkas.tanggalBerakhir)}
                         </TableCell>
-                        <TableCell className="whitespace-nowrap">
+                        <TableCell className="whitespace-nowrap pr-4 sm:pr-6">
                           <div
                             className="truncate"
                             title={berkas.catatan || ""}
@@ -627,7 +627,7 @@ export function BerkasSPList({
                               : "-"}
                           </div>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               size="sm"

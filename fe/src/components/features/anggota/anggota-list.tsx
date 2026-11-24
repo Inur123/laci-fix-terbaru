@@ -43,7 +43,6 @@ import { cn, capitalizeName } from "@/lib/utils";
 import { FileSpreadsheet } from "lucide-react";
 import XLSX from "@/lib/excel";
 import { fetchAllPages } from "@/lib/fetch-all-pages";
-import { Spinner } from "@/components/ui/spinner";
 
 type AnggotaItem = {
   id: string;
@@ -177,6 +176,13 @@ export function AnggotaList({
       <ArrowDown className="ml-1.5 h-3.5 w-3.5 text-slate-600 inline-block" />
     );
   };
+
+  const sortState = (column: SortKey) =>
+    sortKey === column
+      ? sortDir === "asc"
+        ? "ascending"
+        : "descending"
+      : "none";
 
   const sortedData = data;
 
@@ -537,7 +543,7 @@ export function AnggotaList({
             Cari Anggota
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="anggota-search"
               placeholder="Cari nama, jabatan, NIK, atau NIA..."
@@ -598,35 +604,26 @@ export function AnggotaList({
         </div>
       </div>
 
-      <div className="relative" aria-busy={isLoading}>
-        {isLoading && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-md bg-white/70">
-            <Spinner className="h-6 w-6" />
-            <span className="sr-only">Memuat data anggota</span>
-          </div>
-        )}
+      {/* Table Section */}
+      <div className="relative">
         <div className="rounded-md border">
-          <div className="relative max-h-[600px] overflow-auto">
-            <Table className="min-w-[1190px] table-fixed">
-              <TableHeader className="sticky top-0 bg-white z-10 border-b">
+          <div className="overflow-x-auto">
+            <Table
+              className="w-full min-w-[1160px] sm:min-w-[1120px] table-fixed"
+              aria-busy={isLoading}
+            >
+              <TableHeader className="sticky top-0 bg-white z-10">
                 <TableRow>
-                  <TableHead className="w-[50px] bg-slate-50/40 text-center whitespace-nowrap text-slate-500 font-semibold h-11">
+                  <TableHead className="w-[50px] bg-slate-50/40 text-center whitespace-nowrap">
                     No
                   </TableHead>
                   <TableHead
-                    className="w-[280px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
-                    aria-sort={
-                      sortKey === "namaLengkap"
-                        ? sortDir === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
+                    className="w-[280px] bg-slate-50/40 whitespace-nowrap"
+                    aria-sort={sortState("namaLengkap")}
                   >
                     <button
                       type="button"
-                      aria-label="Urutkan berdasarkan nama anggota"
-                      className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                      className="inline-flex w-full items-center rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => handleSort("namaLengkap")}
                     >
                       Nama
@@ -634,19 +631,12 @@ export function AnggotaList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[190px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
-                    aria-sort={
-                      sortKey === "periode"
-                        ? sortDir === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
+                    className="w-[140px] bg-slate-50/40 whitespace-nowrap"
+                    aria-sort={sortState("periode")}
                   >
                     <button
                       type="button"
-                      aria-label="Urutkan berdasarkan periode anggota"
-                      className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                      className="inline-flex w-full items-center rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => handleSort("periode")}
                     >
                       Periode
@@ -654,19 +644,12 @@ export function AnggotaList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[150px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
-                    aria-sort={
-                      sortKey === "jenisKelamin"
-                        ? sortDir === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
+                    className="w-[140px] bg-slate-50/40 whitespace-nowrap"
+                    aria-sort={sortState("jenisKelamin")}
                   >
                     <button
                       type="button"
-                      aria-label="Urutkan berdasarkan jenis kelamin"
-                      className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                      className="inline-flex w-full items-center rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => handleSort("jenisKelamin")}
                     >
                       Jenis Kelamin
@@ -674,19 +657,12 @@ export function AnggotaList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[180px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
-                    aria-sort={
-                      sortKey === "noHp"
-                        ? sortDir === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
+                    className="w-[150px] bg-slate-50/40 whitespace-nowrap"
+                    aria-sort={sortState("noHp")}
                   >
                     <button
                       type="button"
-                      aria-label="Urutkan berdasarkan nomor HP"
-                      className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                      className="inline-flex w-full items-center rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => handleSort("noHp")}
                     >
                       No. HP
@@ -694,26 +670,19 @@ export function AnggotaList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[160px] bg-slate-50/40 whitespace-nowrap text-slate-500 font-semibold h-11 p-0"
-                    aria-sort={
-                      sortKey === "dibuatOleh"
-                        ? sortDir === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
+                    className="w-[160px] bg-slate-50/40 whitespace-nowrap"
+                    aria-sort={sortState("dibuatOleh")}
                   >
                     <button
                       type="button"
-                      aria-label="Urutkan berdasarkan pembuat data"
-                      className="inline-flex h-11 w-full items-center px-4 text-left hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                      className="inline-flex w-full items-center rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       onClick={() => handleSort("dibuatOleh")}
                     >
                       Dibuat Oleh
                       <SortIcon col="dibuatOleh" />
                     </button>
                   </TableHead>
-                  <TableHead className="w-[140px] bg-slate-50/40 text-right whitespace-nowrap text-slate-500 font-semibold h-11">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -746,7 +715,7 @@ export function AnggotaList({
                       key={item.id}
                       className="hover:bg-slate-50/50 transition-colors"
                     >
-                      <TableCell className="text-center text-slate-500 font-medium whitespace-nowrap">
+                      <TableCell className="text-center font-medium">
                         {(currentPage - 1) * 10 + index + 1}
                       </TableCell>
                       <TableCell className="max-w-[280px] overflow-hidden whitespace-nowrap">
@@ -774,10 +743,10 @@ export function AnggotaList({
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="overflow-hidden whitespace-nowrap">
+                      <TableCell className="whitespace-nowrap">
                         <Badge
-                          variant="secondary"
-                          className="block w-full max-w-full truncate align-middle font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 border-slate-200"
+                          variant="outline"
+                          className="whitespace-nowrap font-medium bg-slate-100 text-slate-600 border-slate-200"
                           title={item.periode?.nama || "-"}
                         >
                           {item.periode?.nama || "-"}
@@ -815,12 +784,12 @@ export function AnggotaList({
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                         <div className="flex items-center justify-end gap-2">
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 p-0 border-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+                            className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                             asChild
                             title={`Lihat detail ${item.namaLengkap}`}
                           >
@@ -834,7 +803,7 @@ export function AnggotaList({
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 p-0 border-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+                            className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                             asChild
                             title={`Edit ${item.namaLengkap}`}
                           >
@@ -848,7 +817,7 @@ export function AnggotaList({
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 p-0 border-slate-200 text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="h-11 w-11 p-0 text-red-500 hover:text-red-600 sm:h-8 sm:w-8"
                             onClick={() => setConfirmDeleteId(item.id)}
                             title={`Hapus ${item.namaLengkap}`}
                             aria-label={`Hapus ${item.namaLengkap}`}

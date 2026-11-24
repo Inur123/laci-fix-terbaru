@@ -68,16 +68,16 @@ export function AnggotaSkeleton() {
       {/* Table Skeleton */}
       <div className="rounded-md border">
         <div className="relative max-h-[600px] overflow-auto">
-          <Table className="min-w-[900px]">
+          <Table className="w-full min-w-[1160px] sm:min-w-[1120px] table-fixed">
             <TableHeader className="sticky top-0 bg-slate-50/40 z-10">
               <TableRow>
                 <TableHead className="w-[50px] bg-slate-50/40 text-center whitespace-nowrap">
                   No
                 </TableHead>
-                <TableHead className="w-[250px] bg-slate-50/40 whitespace-nowrap">
+                <TableHead className="w-[280px] bg-slate-50/40 whitespace-nowrap">
                   Nama Pimpinan
                 </TableHead>
-                <TableHead className="w-[120px] bg-slate-50/40 whitespace-nowrap">
+                <TableHead className="w-[140px] bg-slate-50/40 whitespace-nowrap">
                   Periode
                 </TableHead>
                 <TableHead className="w-[120px] bg-slate-50/40 whitespace-nowrap">
@@ -89,7 +89,7 @@ export function AnggotaSkeleton() {
                 <TableHead className="w-[150px] bg-slate-50/40 whitespace-nowrap">
                   Dibuat Oleh
                 </TableHead>
-                <TableHead className="w-[100px] bg-slate-50/40 text-right whitespace-nowrap">
+                <TableHead className="w-[180px] sm:w-[130px] bg-slate-50/40 text-right whitespace-nowrap pr-4">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -137,11 +137,11 @@ export function AnggotaSkeleton() {
                   </TableCell>
 
                   {/* Aksi (3 buttons) */}
-                  <TableCell className="text-right">
+                  <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                     <div className="flex items-center justify-end gap-2">
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                      <Skeleton className="h-8 w-8 rounded-md" />
-                      <Skeleton className="h-8 w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
+                      <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 rounded-md" />
                     </div>
                   </TableCell>
                 </TableRow>

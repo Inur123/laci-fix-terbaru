@@ -586,12 +586,12 @@ export function PengajuanBerkasForm({
               {isSubmitting ? (
                 <>
                   <Spinner className="mr-2 h-4 w-4" />
-                  Loading...
+                  {pengajuan ? "Menyimpan..." : "Mengirim..."}
                 </>
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
-                  {pengajuan ? "Update Pengajuan" : "Kirim Pengajuan"}
+                  {pengajuan ? "Simpan" : "Kirim"}
                 </>
               )}
             </Button>

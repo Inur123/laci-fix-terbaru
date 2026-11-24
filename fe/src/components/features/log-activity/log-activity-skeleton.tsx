@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -46,15 +47,64 @@ export function LogActivitySkeleton({ userRole }: { userRole?: string }) {
         ))}
       </div>
 
-      {/* Filter / Search Skeleton */}
-      <div className="flex flex-col md:flex-row gap-4 items-end">
-        <div className="flex-1 w-full space-y-1.5">
-          <Skeleton className="h-3 w-20" />
-          <Skeleton className="h-10 w-full rounded-md" />
+      {/* Filter Section Skeleton */}
+      <div className="flex flex-wrap xl:flex-nowrap gap-4 mb-6 items-end">
+        {/* Search */}
+        <div className="w-full xl:w-auto xl:flex-1 space-y-1.5">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-11 sm:h-9 w-full rounded-md" />
         </div>
-        <div className="flex gap-2 w-full md:w-auto">
-          <Skeleton className="h-10 w-24 rounded-md" />
-          <Skeleton className="h-10 w-24 rounded-md" />
+
+        {/* Date */}
+        <div
+          className={cn(
+            "w-full sm:w-auto xl:flex-none space-y-1.5",
+            isCabang
+              ? "sm:flex-[1.1] sm:min-w-[160px] xl:w-52"
+              : "sm:flex-[1.2] sm:min-w-[170px] xl:w-56",
+          )}
+        >
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-11 sm:h-9 w-full rounded-md" />
+        </div>
+
+        {/* User (for Cabang Global view) */}
+        {isCabang && (
+          <div className="w-full sm:w-auto sm:flex-[1.1] sm:min-w-[160px] xl:flex-none xl:w-48 space-y-1.5">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-11 sm:h-9 w-full rounded-md" />
+          </div>
+        )}
+
+        {/* Entitas */}
+        <div
+          className={cn(
+            "w-[calc(50%-8px)] sm:w-auto sm:flex-1 xl:flex-none space-y-1.5",
+            isCabang
+              ? "sm:min-w-[120px] xl:w-32"
+              : "sm:min-w-[130px] xl:w-36",
+          )}
+        >
+          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-11 sm:h-9 w-full rounded-md" />
+        </div>
+
+        {/* Modul */}
+        <div
+          className={cn(
+            "w-[calc(50%-8px)] sm:w-auto sm:flex-1 xl:flex-none space-y-1.5",
+            isCabang
+              ? "sm:min-w-[120px] xl:w-36"
+              : "sm:min-w-[130px] xl:w-40",
+          )}
+        >
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-11 sm:h-9 w-full rounded-md" />
+        </div>
+
+        {/* Reset */}
+        <div className="w-full sm:w-auto shrink-0">
+          <Skeleton className="h-11 sm:h-9 w-full sm:w-20 rounded-md" />
         </div>
       </div>
 

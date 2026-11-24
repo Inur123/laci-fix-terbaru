@@ -2,13 +2,16 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { User, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { verifyRecaptchaAction } from "@/app/actions/recaptcha-actions";
+import { AuthSplitLayout } from "@/components/features/public-v2/auth-split-layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import { AlertTriangle, ServerCrash, Clock } from "lucide-react";
 
@@ -24,13 +27,11 @@ export default function RegisterForm({
   const [isLoading, setIsLoading] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  // States
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Password strength
   const getPasswordStrength = (pwd: string) => {
     if (!pwd) return { score: 0, label: "", color: "" };
     let score = 0;
@@ -156,77 +157,26 @@ export default function RegisterForm({
   );
 
   return (
-    <div className="min-h-screen w-full grid lg:grid-cols-2 lg:h-screen lg:overflow-hidden">
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 p-12 relative overflow-hidden lg:rounded-tr-[16px] lg:rounded-br-[16px] shadow-2xl z-20">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative z-10 text-center space-y-8 max-w-lg">
-          <div className="flex justify-center">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={200}
-              height={172}
-              className="drop-shadow-2xl"
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-white">
-              Laci Digital IPNU IPPNU
-            </h1>
-            <p className="text-lg text-green-50 leading-relaxed">
-              Bergabunglah dengan sistem manajemen administrasi digital untuk
-              PAC IPNU & IPPNU
-            </p>
-          </div>
-          <div className="pt-8 space-y-3 text-green-50">
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Pendaftaran mudah dan cepat</p>
-            </div>
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Verifikasi oleh Sekretaris Cabang</p>
-            </div>
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Akses penuh setelah aktivasi</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Form Container */}
-      <div className="flex items-start sm:items-center justify-center p-6 bg-white overflow-hidden">
-        <div className="w-full max-w-md space-y-4 pt-4 sm:pt-0">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={60}
-              height={52}
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-
-          <div className="space-y-1 text-center lg:text-left">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
-              Buat Akun Baru
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600">
-              {isCabangReady
-                ? "Daftar untuk mulai menggunakan Laci Digital"
-                : "Pendaftaran Akun PAC Sementara Ditangguhkan"}
-            </p>
-          </div>
-
+    <AuthSplitLayout
+      page="register"
+      cardTitle="Buat akun baru"
+      cardDescription={
+        isCabangReady
+          ? "Daftar untuk mulai menggunakan Laci Digital"
+          : "Pendaftaran akun PAC sementara ditangguhkan"
+      }
+      alternateAction={
+        <p>
+          Sudah punya akun?{" "}
+          <Link
+            href="/login"
+            className="font-semibold text-[#0a8744] underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744]"
+          >
+            Masuk di sini
+          </Link>
+        </p>
+      }
+    >
           {!isCabangReady ? (
             <div className="space-y-6">
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 space-y-4">
@@ -237,8 +187,8 @@ export default function RegisterForm({
                   <h3 className="font-bold">Sistem Belum Siap</h3>
                 </div>
                 <p className="text-sm text-amber-800 leading-relaxed">
-                  Pendaftaran akun PAC baru memerlukan **Verifikasi & Periode
-                  Aktif** dari Sekretaris Cabang. Saat ini, Admin Cabang belum
+                  Pendaftaran akun PAC baru memerlukan verifikasi dan periode
+                  aktif dari Sekretaris Cabang. Saat ini, Admin Cabang belum
                   mengatur periode kepengurusan yang aktif.
                 </p>
                 <div className="pt-2 border-t border-amber-100">
@@ -253,7 +203,7 @@ export default function RegisterForm({
 
               <div className="space-y-3">
                 <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-50 border border-slate-100">
-                  <ServerCrash className="text-slate-400" size={20} />
+                  <ServerCrash className="text-slate-500" size={20} />
                   <div className="text-xs text-slate-500">
                     <span className="font-bold block text-slate-700 mb-0.5">
                       Hanya 1 Admin Utama
@@ -265,33 +215,34 @@ export default function RegisterForm({
 
                 <Link
                   href="/login"
-                  className="w-full flex justify-center items-center py-3 px-4 rounded-lg text-white bg-green-700 hover:bg-green-800 transition-all shadow-lg font-bold"
+                  className="flex h-12 w-full items-center justify-center rounded-xl bg-[#0a8744] px-4 text-sm font-bold text-white shadow-sm hover:bg-[#086d37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744]/30 focus-visible:ring-offset-2"
                 >
                   Masuk ke Akun Admin
                 </Link>
 
-                <p className="text-center text-xs text-slate-400">
+                <p className="text-center text-xs text-slate-500">
                   Jika Anda adalah Admin Cabang, silakan masuk dan aktifkan
                   periode di Dashboard.
                 </p>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" name="register">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">
+                <Label htmlFor="register-name" className="font-semibold text-slate-700">
                   Nama Pimpinan
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <User size={18} className="text-slate-400" />
-                  </div>
-                  <input
+                  <User aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500" />
+                  <Input
+                    id="register-name"
+                    name="name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-600 outline-none transition-all"
+                    className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
                     placeholder="Nama Pimpinan"
+                    autoComplete="name"
                     required
                     disabled={isLoading}
                   />
@@ -299,19 +250,20 @@ export default function RegisterForm({
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">
+                <Label htmlFor="register-email" className="font-semibold text-slate-700">
                   Alamat Email
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Mail size={18} className="text-slate-400" />
-                  </div>
-                  <input
+                  <Mail aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500" />
+                  <Input
+                    id="register-email"
+                    name="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-600 outline-none transition-all"
+                    className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
                     placeholder="anda@email.com"
+                    autoComplete="email"
                     required
                     disabled={isLoading}
                   />
@@ -319,19 +271,20 @@ export default function RegisterForm({
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">
+                <Label htmlFor="register-password" className="font-semibold text-slate-700">
                   Password
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Lock size={18} className="text-slate-400" />
-                  </div>
-                  <input
+                  <Lock aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500" />
+                  <Input
+                    id="register-password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-11 pr-12 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-600 outline-none transition-all"
+                    className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 pr-12 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
                     placeholder="Minimal 6 karakter"
+                    autoComplete="new-password"
                     required
                     disabled={isLoading}
                   />
@@ -339,7 +292,7 @@ export default function RegisterForm({
                     type="button"
                     aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                     title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-                    className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green-600"
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-xl text-slate-500 transition-colors hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0a8744]"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -347,7 +300,6 @@ export default function RegisterForm({
                 </div>
               </div>
 
-              {/* Password Strength Indicator */}
               {password && (
                 <div className="space-y-1.5 -mt-2">
                   <div className="flex gap-1">
@@ -374,19 +326,20 @@ export default function RegisterForm({
               )}
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-slate-700">
+                <Label htmlFor="register-password-confirm" className="font-semibold text-slate-700">
                   Konfirmasi Password
-                </label>
+                </Label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <Lock size={18} className="text-slate-400" />
-                  </div>
-                  <input
+                  <Lock aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500" />
+                  <Input
+                    id="register-password-confirm"
+                    name="passwordConfirm"
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="block w-full pl-11 pr-12 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-600 outline-none transition-all"
+                    className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 pr-12 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
                     placeholder="Ulangi password"
+                    autoComplete="new-password"
                     required
                     disabled={isLoading}
                   />
@@ -402,7 +355,7 @@ export default function RegisterForm({
                         ? "Sembunyikan konfirmasi password"
                         : "Tampilkan konfirmasi password"
                     }
-                    className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green-600"
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-xl text-slate-500 transition-colors hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0a8744]"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
@@ -412,7 +365,6 @@ export default function RegisterForm({
                     )}
                   </button>
                 </div>
-                {/* Match indicator */}
                 {confirmPassword && (
                   <p
                     className="text-xs font-medium"
@@ -428,7 +380,6 @@ export default function RegisterForm({
                 )}
               </div>
 
-              {/* Checkbox Persetujuan Ketentuan & Kebijakan Privasi */}
               <div className="flex items-start gap-2">
                 <input
                   id="agreeToTerms"
@@ -446,7 +397,8 @@ export default function RegisterForm({
                   <Link
                     href="/ketentuan-penggunaan"
                     target="_blank"
-                    className="font-semibold text-green-700 hover:underline"
+                    rel="noopener noreferrer"
+                    className="rounded-sm font-semibold text-green-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a8744]"
                   >
                     Ketentuan Penggunaan
                   </Link>{" "}
@@ -454,7 +406,8 @@ export default function RegisterForm({
                   <Link
                     href="/kebijakan-privasi"
                     target="_blank"
-                    className="font-semibold text-green-700 hover:underline"
+                    rel="noopener noreferrer"
+                    className="rounded-sm font-semibold text-green-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a8744]"
                   >
                     Kebijakan Privasi
                   </Link>{" "}
@@ -462,30 +415,19 @@ export default function RegisterForm({
                 </label>
               </div>
 
-              <button
+              <Button
                 type="submit"
                 disabled={isLoading || !agreeToTerms}
-                className="w-full flex justify-center items-center py-3 px-4 rounded-lg text-white bg-green-700 hover:bg-green-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer font-bold"
+                className="h-12 w-full rounded-xl bg-[#0a8744] font-bold text-white shadow-sm shadow-emerald-900/10 hover:bg-[#086d37] focus-visible:ring-[#0a8744]/30"
               >
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   "Daftar Sekarang"
                 )}
-              </button>
+              </Button>
             </form>
           )}
-          <div className="text-center text-sm text-slate-600 mt-4">
-            Sudah punya akun?{" "}
-            <Link
-              href="/login"
-              className="font-semibold text-green-700 hover:text-green-800"
-            >
-              Masuk di sini
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    </AuthSplitLayout>
   );
 }

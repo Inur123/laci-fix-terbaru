@@ -381,7 +381,7 @@ export function ArsipSuratList({
             Cari Arsip
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="arsip-search"
               placeholder="Cari nomor surat, perihal, atau pengirim..."
@@ -474,7 +474,7 @@ export function ArsipSuratList({
         <div className="rounded-md border">
           <div className="overflow-x-auto">
             <Table
-              className="w-full min-w-[1120px] table-fixed"
+              className="w-full min-w-[1160px] sm:min-w-[1120px] table-fixed"
               aria-busy={isLoading}
             >
               <TableHeader className="sticky top-0 bg-white z-10">
@@ -548,7 +548,7 @@ export function ArsipSuratList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="bg-slate-50/40 whitespace-nowrap"
+                    className="min-w-[200px] bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6"
                     aria-sort={sortState("perihal")}
                   >
                     <button
@@ -560,7 +560,7 @@ export function ArsipSuratList({
                       <SortIcon col="perihal" />
                     </button>
                   </TableHead>
-                  <TableHead className="w-[130px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -641,12 +641,12 @@ export function ArsipSuratList({
                           {arsip.pengirimPenerima}
                         </TableCell>
                         <TableCell
-                          className="max-w-[300px] truncate whitespace-nowrap"
+                          className="max-w-[300px] truncate whitespace-nowrap pr-4 sm:pr-6"
                           title={arsip.perihal}
                         >
                           {arsip.perihal}
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               size="sm"

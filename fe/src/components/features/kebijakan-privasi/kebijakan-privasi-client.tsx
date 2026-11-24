@@ -1,155 +1,169 @@
-"use client";
+import { ShieldCheck } from "lucide-react";
 
-import { PublicLayout } from "@/components/features/home/home-client";
+import { LegalPageShell } from "@/components/features/public-v2/legal-page-shell";
 
 const sections = [
   {
-    title: "1. Pendahuluan",
-    content: `PC IPNU IPPNU Kabupaten Magetan berkomitmen untuk melindungi privasi dan keamanan data pribadi setiap pengguna LACI Digital — Layanan Cerdas Administrasi ("Platform"). Kebijakan Privasi ini menjelaskan data apa yang kami kumpulkan, bagaimana data tersebut digunakan, serta langkah perlindungan yang kami terapkan.
+    title: "1. Tentang Kebijakan Ini",
+    content: `Kebijakan Privasi ini menjelaskan data yang diproses oleh Laci Digital, tujuan pemrosesan, pihak yang dapat mengaksesnya, serta pilihan yang tersedia bagi pengguna.
 
-Dengan menggunakan Platform, Anda menyetujui praktik-praktik yang dijelaskan dalam Kebijakan Privasi ini.`,
+Laci Digital dikelola untuk kebutuhan administrasi PC IPNU IPPNU Kabupaten Magetan. Kebijakan ini berlaku bagi Sekretaris Cabang, Sekretaris PAC, anggota yang datanya dicatat, dan peserta yang mengisi presensi publik.`,
   },
   {
-    title: "2. Data yang Kami Kumpulkan",
-    content: `Kami mengumpulkan data berikut saat Anda mendaftar dan menggunakan Platform:
+    title: "2. Data Akun",
+    content: `Saat akun dibuat atau diperbarui, sistem dapat memproses:
 
-Data Akun:
-• Nama lengkap
-• Alamat email (digunakan untuk verifikasi dan komunikasi)
-• Foto profil (opsional)
-• Peran pengguna (Sekretaris Cabang atau Sekretaris PAC)
+• nama lengkap;
+• alamat email;
+• password dalam bentuk hash, bukan teks asli;
+• peran dan status akun;
+• foto profil;
+• identitas organisasi, termasuk nama PAC;
+• status verifikasi email dan waktu login terakhir.
 
-Data Organisasi yang Anda Input:
-• Data anggota yang dikelola sesuai wewenang peran Anda
-• Arsip surat dan berkas yang Anda unggah
-• Data pengajuan PAC, kegiatan, dan presensi
-
-Data Teknis:
-• Waktu login dan aktivitas sesi
-• Riwayat aktivitas yang tercatat di fitur Riwayat Aktivitas (Audit Log)`,
+Jika login dengan Google digunakan, sistem menerima identitas dasar yang disetujui melalui Google, seperti email, nama, dan foto profil. Login Google hanya tersedia bagi akun Laci Digital yang sudah terdaftar dan aktif.`,
   },
   {
-    title: "3. Cara Kami Menggunakan Data",
-    content: `Data yang kami kumpulkan digunakan untuk:
+    title: "3. Data Administrasi Organisasi",
+    content: `Sesuai fitur yang digunakan, sistem dapat menyimpan:
 
-• Autentikasi & Keamanan — verifikasi identitas dan proteksi akun dari akses tidak sah.
-• Operasional Fitur — menjalankan seluruh fitur Platform (arsip, pengajuan, anggota, kegiatan, presensi, dll).
-• Audit Trail — mencatat riwayat aktivitas pengguna untuk transparansi dan akuntabilitas organisasi. Catatan ini dapat dilihat oleh pengguna di menu Riwayat Aktivitas.
-• Komunikasi — mengirimkan email verifikasi akun dan notifikasi penting lainnya.
+• periode kepengurusan;
+• arsip surat, berkas pimpinan, Berkas SP, agenda, dan pengajuan;
+• nomor surat, perihal, tanggal, status, catatan, serta file lampiran;
+• data anggota, seperti NIK, NIA, nama, email, nomor telepon, alamat, tempat dan tanggal lahir, jenis kelamin, jabatan, pekerjaan, pendidikan, instansi, riwayat pendidikan, dan riwayat kaderisasi;
+• informasi PAC, Cabang, kegiatan, dan data organisasi lain yang dimasukkan pengguna.
 
-Kami tidak menggunakan data Anda untuk keperluan komersial atau iklan.`,
+Pengguna wajib membatasi data yang dimasukkan pada informasi yang memang diperlukan untuk administrasi organisasi.`,
   },
   {
-    title: "4. Keamanan Data",
-    content: `Kami menerapkan langkah keamanan teknis untuk melindungi data Anda:
+    title: "4. Data Presensi",
+    content: `Peserta dapat mengisi presensi melalui tautan atau QR publik. Data yang dapat diproses meliputi nama, email, nomor telepon, organisasi, tingkatan, jabatan, instansi, waktu kehadiran, dan kegiatan yang diikuti.
 
-• Enkripsi Berkas — berkas sensitif yang diunggah dienkripsi sebelum disimpan.
-• Penyimpanan Cloud Aman — berkas disimpan di infrastruktur penyimpanan cloud dengan akses terkontrol.
-• HTTPS — seluruh komunikasi antara browser dan server dienkripsi secara penuh.
-• RBAC (Kontrol Akses Berbasis Peran) — setiap pengguna hanya dapat mengakses data sesuai perannya. Sekretaris PAC tidak dapat mengakses data PAC lain atau fitur tingkat cabang.
-• Proteksi Anti-Bot — formulir autentikasi dilindungi dari akses bot otomatis.
-• Pembatasan Akses Email Belum Terverifikasi — pengguna yang belum verifikasi email memiliki akses terbatas hingga verifikasi dilakukan.`,
+Email dan nomor telepon juga dipakai dalam bentuk hash untuk membantu mencegah pengisian ganda. Pengurus yang membuat presensi bertanggung jawab memastikan peserta mengetahui tujuan pengumpulan data tersebut.`,
   },
   {
-    title: "5. Berbagi Data",
-    content: `Laci Digital tidak menjual atau membagikan data pribadi Anda kepada pihak ketiga untuk tujuan komersial.
+    title: "5. Data Keamanan dan Aktivitas",
+    content: `Untuk keamanan, audit, dan penanganan masalah, sistem mencatat informasi seperti:
 
-Data dapat dibagikan hanya dalam kondisi berikut:
+• alamat IP;
+• user agent, jenis browser, dan perangkat;
+• alamat lokasi ringkas saat login;
+• waktu, tindakan, modul, dan entitas yang diakses atau diubah;
+• sesi login serta waktu kedaluwarsanya;
+• status dan riwayat pengiriman email.
 
-• Infrastruktur Teknis — Platform menggunakan layanan penyimpanan berkas dan pengiriman email pihak ketiga yang terikat perjanjian kerahasiaan.
-• Kewajiban Hukum — jika diwajibkan oleh hukum atau perintah pengadilan yang berlaku di Indonesia.
-• Perlindungan Organisasi — jika pengungkapan diperlukan untuk mencegah penipuan atau bahaya.`,
+Browser meminta koordinat saat login. Koordinat dipakai untuk mencari alamat melalui layanan geolokasi dan disimpan sementara pada browser selama paling lama 24 jam. Log aktivitas menyimpan alamat lokasi ringkas, bukan password atau kode OTP.`,
   },
   {
-    title: "6. Riwayat Aktivitas (Audit Log)",
-    content: `Laci Digital memiliki fitur Riwayat Aktivitas yang mencatat seluruh aksi pengguna di dalam Platform. Catatan ini meliputi:
+    title: "6. Cara Data Diperoleh",
+    content: `Data diperoleh dari:
 
-• Aktivitas login dan logout
-• Penambahan, perubahan, dan penghapusan data
-• Unggah dan pengelolaan berkas
-• Perubahan status pengajuan PAC
+• informasi yang dimasukkan langsung oleh pengguna atau peserta;
+• akun Google saat pengguna memilih login dengan Google;
+• browser dan perangkat saat login atau menggunakan sistem;
+• aktivitas yang dilakukan melalui dashboard dan API;
+• dokumen, foto, dan file yang diunggah;
+• pengurus lain yang berwenang mengelola data organisasi.
 
-Riwayat aktivitas dapat diakses oleh pengguna melalui menu Riwayat Aktivitas di sidebar dashboard. Tujuannya adalah untuk transparansi dan akuntabilitas internal organisasi.`,
+Jika Anda memasukkan data orang lain, pastikan Anda memiliki kewenangan organisasi dan telah memberikan informasi yang diperlukan kepada orang tersebut.`,
   },
   {
-    title: "7. Hak-Hak Anda",
-    content: `Sebagai pengguna, Anda memiliki hak-hak berikut:
+    title: "7. Tujuan Pemrosesan",
+    content: `Data digunakan untuk:
 
-• Hak Akses — melihat data profil dan riwayat aktivitas Anda melalui dashboard.
-• Hak Koreksi — memperbarui data profil (nama, foto) melalui menu Profil di dashboard.
-• Hak Penghapusan Akun — meminta penghapusan akun dengan menghubungi Sekretaris Cabang atau tim pengelola Platform.
-• Hak Keberatan — mengajukan keberatan terkait pemrosesan data melalui kontak yang tersedia.`,
+• membuat, memverifikasi, mengaktifkan, dan mengamankan akun;
+• menjalankan administrasi arsip, anggota, pengajuan, agenda, presensi, dan periode;
+• menerapkan hak akses Cabang dan PAC;
+• mengirim OTP serta notifikasi operasional;
+• menghasilkan ekspor dan backup yang diminta pengguna berwenang;
+• mencatat audit untuk mencegah penyalahgunaan dan menelusuri perubahan;
+• memperbaiki kesalahan, menjaga stabilitas, dan meningkatkan keamanan sistem.`,
   },
   {
-    title: "8. Cookie dan Sesi Login",
-    content: `Platform menggunakan mekanisme sesi browser untuk:
+    title: "8. Penyedia Layanan",
+    content: `Laci Digital menggunakan layanan berikut sesuai kebutuhan fitur:
 
-• Menjaga status login agar Anda tidak perlu masuk ulang setiap membuka Platform.
-• Menyimpan preferensi tampilan sementara selama sesi berlangsung.
+• Google OAuth untuk login dan Google reCAPTCHA untuk mengurangi penyalahgunaan form;
+• Cloudflare R2 untuk penyimpanan file dan backup;
+• penyedia SMTP untuk pengiriman OTP serta notifikasi;
+• BigDataCloud dan OpenStreetMap Nominatim untuk mengubah koordinat login menjadi alamat;
+• layanan hari libur untuk membantu tampilan kalender;
+• penyedia hosting aplikasi dan database.
 
-Mekanisme ini bersifat esensial untuk operasional Platform dan tidak digunakan untuk pelacakan lintas situs.`,
+Data hanya dikirim sejauh yang diperlukan oleh fitur tersebut. Kebijakan privasi masing-masing penyedia juga berlaku ketika layanannya digunakan.`,
   },
   {
-    title: "9. Retensi Data",
-    content: `Kami menyimpan data Anda selama:
+    title: "9. Cookie dan Penyimpanan Browser",
+    content: `Sistem memakai cookie dan penyimpanan browser yang diperlukan untuk fungsi utama, antara lain:
 
-• Akun Aktif — data disimpan selama akun Anda dalam status aktif.
-• Setelah Penghapusan Akun — data terkait dapat dihapus secara permanen sesuai permintaan.
-• Riwayat Aktivitas — disimpan untuk keperluan audit internal organisasi.`,
+• cookie sesi untuk mempertahankan login;
+• cookie state sementara untuk melindungi alur login Google;
+• lokasi dan alamat login yang berlaku paling lama 24 jam;
+• pilihan periode yang sedang dilihat;
+• preferensi antarmuka yang diperlukan oleh aplikasi.
+
+Cookie sesi menggunakan pengaturan HttpOnly dan SameSite. Pada lingkungan produksi, cookie sesi juga dikirim melalui koneksi HTTPS. Memblokir cookie penting dapat membuat login, periode, atau fitur lain tidak berfungsi.`,
   },
   {
-    title: "10. Perubahan Kebijakan Privasi",
-    content: `Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu. Perubahan signifikan akan diberitahukan melalui Platform atau email terdaftar. Tanggal pembaruan terakhir selalu ditampilkan di bagian atas halaman ini.`,
+    title: "10. Keamanan Data",
+    content: `Sistem menerapkan kontrol teknis dan operasional, termasuk:
+
+• hash bcrypt untuk password;
+• token sesi dan OTP yang disimpan dalam bentuk digest;
+• enkripsi AES-GCM untuk data sensitif dan file baru yang ditetapkan terenkripsi;
+• validasi input, pembatasan ukuran request, dan pemeriksaan file;
+• autentikasi, otorisasi berbasis peran, dan pembatasan kepemilikan data;
+• rate limit, validasi origin, dan pencatatan audit;
+• backup baru yang dienkripsi.
+
+Tidak ada sistem yang dapat menjamin keamanan mutlak. Pengguna tetap harus menjaga perangkat, email, password, dan sesi login miliknya.`,
   },
   {
-    title: "11. Kontak",
-    content: `Pertanyaan atau permintaan terkait privasi data dapat disampaikan melalui:
+    title: "11. Akses dan Pengungkapan",
+    content: `Sekretaris PAC mengakses data dalam lingkup akun dan periodenya. Sekretaris Cabang dapat mengakses data lintas PAC melalui fitur Cabang yang tersedia untuk verifikasi, pengelolaan akun, administrasi, dan pengawasan organisasi.
 
-Email     : lacipelajarnumagetan@gmail.com
-WhatsApp  : +62 858-5051-2135
-Alamat    : Magetan, Jawa Timur, Indonesia`,
+Data dapat diungkapkan kepada pengurus yang berwenang, penyedia layanan yang diperlukan untuk menjalankan sistem, atau pihak yang diwajibkan oleh hukum. Data tidak digunakan untuk menjual profil anggota atau peserta kepada pihak lain.`,
+  },
+  {
+    title: "12. Penyimpanan dan Penghapusan",
+    content: `Data aktif disimpan selama akun, periode, atau kegiatan administrasi masih diperlukan. OTP berlaku 5 menit. Sesi berakhir saat kedaluwarsa, logout, akun dinonaktifkan, atau password direset sesuai mekanisme sistem.
+
+Penghapusan akun atau periode menghapus data terkait dari database aktif melalui relasi yang tersedia. File terkait akan dihapus dari object storage saat proses penghapusan berhasil.
+
+Backup database baru dienkripsi dan dibatasi hingga 10 backup terbaru. Data yang sudah dihapus dari sistem aktif dapat tetap ada dalam backup sampai backup tersebut keluar dari rotasi. Catatan keamanan dan log dapat disimpan selama diperlukan untuk audit serta penanganan insiden.`,
+  },
+  {
+    title: "13. Pilihan dan Hak Anda",
+    content: `Pengguna dapat memperbarui profil dan data yang berada dalam kewenangannya melalui dashboard. Untuk koreksi akun, penghapusan akun, akses yang salah, atau permintaan terkait data pribadi, hubungi Sekretaris Cabang atau pengelola Laci Digital.
+
+Permintaan akan diperiksa berdasarkan identitas pemohon, kewenangan organisasi, kebutuhan administrasi, keamanan, serta kewajiban yang berlaku. Penghapusan data tertentu dapat ditolak atau ditunda jika data masih diperlukan untuk audit atau penyelesaian proses organisasi.`,
+  },
+  {
+    title: "14. Perubahan dan Kontak",
+    content: `Kebijakan ini dapat diperbarui saat fitur, penyedia layanan, atau praktik keamanan berubah. Tanggal pembaruan terakhir ditampilkan pada halaman ini.
+
+Pertanyaan atau permintaan terkait privasi dapat disampaikan melalui:
+
+Email: lacipelajarnumagetan@gmail.com
+WhatsApp: +62 858-5051-2135
+Lokasi: Magetan, Jawa Timur, Indonesia`,
   },
 ];
 
-export default function KebijakanPrivasiClient() {
+export default function KebijakanPrivasiClient({
+  isAuthenticated = false,
+}: {
+  isAuthenticated?: boolean;
+}) {
   return (
-    <PublicLayout>
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#bbf7d0] bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#15803d] mb-4">
-            Privasi &amp; Keamanan
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Kebijakan Privasi
-          </h1>
-          <p className="mt-3 text-sm text-slate-500">
-            Terakhir diperbarui:{" "}
-            <span className="font-medium text-slate-700">11 Maret 2026</span>
-          </p>
-          <p className="mt-4 text-slate-600 leading-relaxed">
-            Kami berkomitmen menjaga privasi Anda. Dokumen ini menjelaskan
-            bagaimana data Anda dikumpulkan, digunakan, dan dilindungi di
-            platform Laci Digital.
-          </p>
-        </div>
-
-        <div className="h-px bg-slate-200 mb-10" />
-
-        {/* Sections */}
-        <div className="space-y-8">
-          {sections.map((section) => (
-            <section key={section.title}>
-              <h2 className="text-base font-bold text-slate-900 mb-3">
-                {section.title}
-              </h2>
-              <div className="text-sm leading-relaxed text-slate-600 whitespace-pre-line rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
-                {section.content}
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
-    </PublicLayout>
+    <LegalPageShell
+      badge="Privasi"
+      title="Kebijakan Privasi"
+      description="Penjelasan tentang data yang diproses Laci Digital, tujuan penggunaannya, penyedia layanan, keamanan, serta pilihan pengguna."
+      updatedAt="30 Oktober 2026"
+      icon={ShieldCheck}
+      sections={sections}
+      isAuthenticated={isAuthenticated}
+    />
   );
 }

@@ -65,7 +65,7 @@ export function ReferensiSkeleton() {
                 <TableHead className="w-[120px] bg-slate-50/40 whitespace-nowrap">
                   Status
                 </TableHead>
-                <TableHead className="w-[60px] text-right bg-slate-50/40 whitespace-nowrap">
+                <TableHead className="w-[100px] sm:w-[80px] text-right bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -94,8 +94,8 @@ export function ReferensiSkeleton() {
                   <TableCell>
                     <Skeleton className="h-5 w-[80px] rounded-full" />
                   </TableCell>
-                  <TableCell className="text-right">
-                    <Skeleton className="h-8 w-8 ml-auto" />
+                  <TableCell className="w-[100px] sm:w-[80px] text-right pr-4 sm:pr-6">
+                    <Skeleton className="h-11 w-11 sm:h-8 sm:w-8 ml-auto rounded-md" />
                   </TableCell>
                 </TableRow>
               ))}

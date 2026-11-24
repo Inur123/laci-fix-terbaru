@@ -2,9 +2,13 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import LoginClient from "@/components/features/auth/login-client";
+import { AuthSplitLayout } from "@/components/features/public-v2/auth-split-layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
@@ -22,7 +26,6 @@ const requestLocation = (onSuccess?: () => void, onError?: () => void) => {
     return;
   }
 
-  // Toast info instead of blocking alert
   toast.info(
     "Sistem mendeteksi lokasi Anda untuk keamanan. Mohon izinkan akses lokasi jika diminta.",
   );
@@ -36,7 +39,7 @@ const requestLocation = (onSuccess?: () => void, onError?: () => void) => {
 
       try {
         let cleanAddress = "";
-        // Try BigDataCloud first (very fast, free, no rate limits for low volume)
+        // BigDataCloud is the primary reverse-geocoding provider.
         try {
           const res = await fetch(
             `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=id`,
@@ -57,7 +60,7 @@ const requestLocation = (onSuccess?: () => void, onError?: () => void) => {
           console.warn("BigDataCloud failed, falling back to Nominatim...", e);
         }
 
-        // Fallback to Nominatim if BigDataCloud fails
+        // Fall back to Nominatim when the primary lookup fails.
         if (!cleanAddress) {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
@@ -126,7 +129,6 @@ const requestLocation = (onSuccess?: () => void, onError?: () => void) => {
 
 export default function LoginForm() {
   useEffect(() => {
-    // Check permission state and prompt
     if (navigator.permissions && navigator.permissions.query) {
       navigator.permissions
         .query({ name: "geolocation" as PermissionName })
@@ -134,7 +136,7 @@ export default function LoginForm() {
           if (result.state !== "granted") {
             requestLocation();
           } else {
-            // Refresh cookie if already granted
+            // Refresh location cookies when permission was granted earlier.
             navigator.geolocation.getCurrentPosition((pos) => {
               const { latitude, longitude } = pos.coords;
               document.cookie = `user_lat=${latitude}; path=/; max-age=86400; SameSite=Lax`;
@@ -150,93 +152,25 @@ export default function LoginForm() {
     }
   }, []);
   return (
-    <div className="h-screen w-full grid lg:grid-cols-2 overflow-hidden">
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 p-12 relative overflow-hidden lg:rounded-tr-[16px] lg:rounded-br-[16px] shadow-2xl z-20">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-10">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative z-10 text-center space-y-8 max-w-lg">
-          <div className="flex justify-center">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={200}
-              height={172}
-              className="drop-shadow-2xl"
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-white">
-              Laci Digital IPNU IPPNU
-            </h1>
-            <p className="text-lg text-green-50 leading-relaxed">
-              Sistem Manajemen Administrasi Digital untuk Pimpinan Anak Cabang
-              IPNU & IPPNU
-            </p>
-          </div>
-          <div className="pt-8 space-y-3 text-green-50">
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Kelola data anggota dengan mudah</p>
-            </div>
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Arsip surat digital yang terorganisir</p>
-            </div>
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-2 h-2 bg-green-200 rounded-full"></div>
-              <p className="text-sm">Monitoring aktivitas real-time</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Login Form */}
-      <div className="flex items-start sm:items-center justify-center p-4 sm:p-8 bg-white overflow-hidden">
-        <div className="w-full max-w-md space-y-4 pt-4 sm:pt-0">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={60}
-              height={52}
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-
-          {/* Header */}
-          <div className="space-y-1 text-center lg:text-left">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
-              Selamat Datang
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600">
-              Masuk ke akun Anda untuk melanjutkan
-            </p>
-          </div>
-
-          <LoginClient />
-          <LoginWithRecaptcha />
-
-          <div className="text-center text-sm text-slate-600 pb-2">
-            Belum punya akun?{" "}
-            <Link
-              href="/register"
-              className="font-semibold text-green-700 hover:text-green-800 transition-colors"
-            >
-              Daftar di sini
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AuthSplitLayout
+      page="login"
+      cardTitle="Selamat datang kembali"
+      cardDescription="Masuk untuk mengelola administrasi organisasi Anda"
+      alternateAction={
+        <p>
+          Belum punya akun?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-[#0a8744] underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744]"
+          >
+            Daftar sekarang
+          </Link>
+        </p>
+      }
+    >
+      <LoginClient />
+      <LoginWithRecaptcha />
+    </AuthSplitLayout>
   );
 }
 
@@ -314,7 +248,6 @@ function LoginWithRecaptcha() {
           return;
         }
 
-        // Proteksi Tambahan: Cek isActive setelah login berhasil
         const session = await authClient.getSession();
         if (
           session.data?.user &&
@@ -326,7 +259,7 @@ function LoginWithRecaptcha() {
           return;
         }
 
-        // Success - Konsisten dengan Google, biarkan Dashboard yang menampilkan toast
+        // Dashboard shows the success toast after redirect.
         router.push("/dashboard?login=success");
         router.refresh();
       } catch (error) {
@@ -341,29 +274,26 @@ function LoginWithRecaptcha() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4"
+      className="space-y-5"
       name="login"
       data-form-type="login"
     >
-      {/* Email */}
       <div className="space-y-2">
-        <label
-          htmlFor="email"
-          className="block text-sm font-semibold text-slate-700"
-        >
+        <Label htmlFor="email" className="font-semibold text-slate-700">
           Alamat Email
-        </label>
+        </Label>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <Mail size={18} className="text-slate-400" />
-          </div>
-          <input
+          <Mail
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500"
+          />
+          <Input
             type="email"
             id="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all"
+            className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 text-slate-900 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
             placeholder="anda@email.com"
             autoComplete="email"
             data-lpignore="false"
@@ -374,26 +304,30 @@ function LoginWithRecaptcha() {
         </div>
       </div>
 
-      {/* Password */}
       <div className="space-y-2">
-        <label
-          htmlFor="password"
-          className="block text-sm font-semibold text-slate-700"
-        >
+        <div className="flex items-center justify-between gap-4">
+          <Label htmlFor="password" className="font-semibold text-slate-700">
           Password
-        </label>
+          </Label>
+          <Link
+            href="/faq"
+            className="text-xs font-semibold text-[#0a8744] underline-offset-4 hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744]"
+          >
+            Butuh bantuan?
+          </Link>
+        </div>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-            <Lock size={18} className="text-slate-400" />
-          </div>
-
-          <input
+          <Lock
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-slate-500"
+          />
+          <Input
             type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full pl-11 pr-12 py-3 border border-slate-300 rounded-lg bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all"
+            className="h-12 rounded-xl border border-solid border-slate-200/80 bg-white pl-11 pr-12 text-slate-900 shadow-none placeholder:text-slate-500 hover:border-slate-300 focus-visible:border-[#0a8744] focus-visible:ring-0"
             placeholder="Masukkan password"
             autoComplete="current-password"
             data-lpignore="false"
@@ -406,7 +340,7 @@ function LoginWithRecaptcha() {
             type="button"
             aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
             title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-green-600"
+            className="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-xl text-slate-500 transition-colors hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0a8744]"
             onClick={() => setShowPassword(!showPassword)}
             disabled={isLoading}
           >
@@ -415,11 +349,10 @@ function LoginWithRecaptcha() {
         </div>
       </div>
 
-      {/* Submit */}
-      <button
+      <Button
         type="submit"
         disabled={isLoading}
-        className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 transition-all shadow-lg shadow-green-700/30 hover:shadow-xl hover:shadow-green-700/40 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
+        className="h-12 w-full rounded-xl bg-[#0a8744] font-bold text-white shadow-sm shadow-emerald-900/10 hover:bg-[#086d37] focus-visible:ring-[#0a8744]/30"
       >
         {isLoading ? (
           <>
@@ -429,10 +362,16 @@ function LoginWithRecaptcha() {
         ) : (
           "Masuk"
         )}
-      </button>
+      </Button>
 
-      {/* Google Login */}
-      <button
+      <div className="relative py-1">
+        <Separator />
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[11px] font-medium uppercase tracking-[0.14em] text-slate-500">
+          atau
+        </span>
+      </div>
+
+      <Button
         type="button"
         onClick={async () => {
           const cookiesArr = document.cookie.split(";");
@@ -465,7 +404,8 @@ function LoginWithRecaptcha() {
           }
         }}
         disabled={isLoading || isGoogleLoading}
-        className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-all hover:shadow-sm disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+        variant="outline"
+        className="h-12 w-full rounded-xl border-slate-200/80 bg-white font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50"
       >
         {isGoogleLoading ? (
           <Loader2 className="w-5 h-5 animate-spin text-green-600" />
@@ -494,7 +434,7 @@ function LoginWithRecaptcha() {
           </svg>
         )}
         {isGoogleLoading ? "Menyambungkan..." : "Masuk dengan Google"}
-      </button>
+      </Button>
     </form>
   );
 }

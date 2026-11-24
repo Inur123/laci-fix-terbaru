@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect, Suspense } from "react";
-import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { checkEmailVerificationStatus } from "@/app/actions/auth-actions";
+import { AuthSplitLayout } from "@/components/features/public-v2/auth-split-layout";
+import { Button } from "@/components/ui/button";
 
 function VerifyEmailContent() {
   const router = useRouter();
@@ -26,7 +27,7 @@ function VerifyEmailContent() {
       return;
     }
 
-    // Smart Check: Redirect if already verified
+    // Verified accounts do not need the OTP form.
     const checkStatus = async () => {
       const result = await checkEmailVerificationStatus(email);
       if (result.verified) {
@@ -162,63 +163,20 @@ function VerifyEmailContent() {
   }
 
   return (
-    <div className="min-h-screen w-full grid lg:grid-cols-2 lg:h-screen lg:overflow-hidden">
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 p-12 relative overflow-hidden lg:rounded-tr-[16px] lg:rounded-br-[16px] shadow-2xl z-20">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative z-10 text-center space-y-8 max-w-lg">
-          <div className="flex justify-center">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={200}
-              height={172}
-              className="drop-shadow-2xl"
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-white">
-              Verifikasi Akun Laci Digital
-            </h1>
-            <p className="text-lg text-green-50 leading-relaxed">
-              Satu langkah lagi untuk bergabung dengan sistem manajemen
-              administrasi digital PAC IPNU & IPPNU
-            </p>
-          </div>
-        </div>
-      </div>
+    <AuthSplitLayout
+      page="verify"
+      cardTitle="Verifikasi email Anda"
+      cardDescription="Masukkan kode 6 digit yang telah dikirim ke alamat email Anda."
+      brandDescription="Satu langkah lagi untuk mengaktifkan akun Laci Digital dan menjaga akses organisasi tetap aman."
+    >
+          <p className="mb-6 break-all rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-center text-sm font-semibold text-[#075d32]">
+            {email}
+          </p>
 
-      {/* Right Side - Verify Form */}
-      <div className="flex items-center justify-center p-6 bg-white">
-        <div className="w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex justify-center lg:hidden mb-4">
-            <Image
-              src="/images/logo-laci.webp"
-              alt="Logo LACI"
-              width={60}
-              height={52}
-              style={{ height: "auto" }}
-              priority
-            />
-          </div>
-
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
-              Verifikasi Email Anda
-            </h2>
-            <p className="text-sm text-slate-600">
-              Kami telah mengirimkan kode 6-digit ke <br />
-              <span className="font-semibold text-slate-900">{email}</span>
-            </p>
-          </div>
-
-          <form onSubmit={handleVerifyOtp} className="space-y-8">
-            <div className="flex justify-center gap-2 sm:gap-3">
+          <form onSubmit={handleVerifyOtp} className="space-y-6">
+            <fieldset>
+              <legend className="sr-only">Kode verifikasi 6 digit</legend>
+              <div className="flex justify-center gap-2 sm:gap-3">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -227,35 +185,38 @@ function VerifyEmailContent() {
                   }}
                   type="text"
                   inputMode="numeric"
+                  autoComplete={index === 0 ? "one-time-code" : "off"}
+                  aria-label={`Digit kode verifikasi ${index + 1}`}
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-bold border-2 border-slate-200 rounded-lg focus:border-green-600 focus:ring-4 focus:ring-green-100 outline-none transition-all"
+                  className="h-12 w-10 rounded-xl border border-solid border-slate-200/80 bg-white text-center text-xl font-bold text-[#091526] shadow-none outline-none transition-colors hover:border-slate-300 focus:border-[#0a8744] focus:ring-0 sm:h-14 sm:w-12"
                 />
               ))}
-            </div>
+              </div>
+            </fieldset>
 
             <div className="space-y-4">
-              <button
+              <Button
                 type="submit"
                 disabled={otpPending}
-                className="w-full py-4 bg-green-700 text-white font-bold rounded-xl shadow-lg hover:bg-green-800 transition-all disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                className="h-12 w-full rounded-xl bg-[#0a8744] font-bold text-white shadow-sm shadow-emerald-900/10 hover:bg-[#086d37] focus-visible:ring-[#0a8744]/30"
               >
                 {otpPending ? (
                   <Loader2 className="animate-spin" />
                 ) : (
                   "Verifikasi Akun"
                 )}
-              </button>
+              </Button>
 
               <div className="flex flex-col items-center gap-4">
                 <button
                   type="button"
                   onClick={handeResendOtp}
                   disabled={resendTimer > 0}
-                  className="text-sm font-semibold text-green-700 hover:text-green-800 disabled:text-slate-400 transition-colors cursor-pointer"
+                  className="min-h-11 rounded-lg px-3 text-sm font-semibold text-[#0a8744] transition-colors hover:bg-emerald-50 hover:text-[#075d32] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a8744] disabled:cursor-not-allowed disabled:text-slate-400"
                 >
                   {resendTimer > 0
                     ? `Kirim ulang kode dalam ${resendTimer} detik`
@@ -264,9 +225,7 @@ function VerifyEmailContent() {
               </div>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
+    </AuthSplitLayout>
   );
 }
 

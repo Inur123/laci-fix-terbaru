@@ -566,12 +566,12 @@ export function BerkasPimpinanForm({
               {isSubmitting ? (
                 <>
                   <Spinner className="mr-2 h-4 w-4" />
-                  Loading...
+                  Menyimpan...
                 </>
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
-                  Simpan Berkas
+                  Simpan
                 </>
               )}
             </Button>

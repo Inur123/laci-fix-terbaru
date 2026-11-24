@@ -323,7 +323,7 @@ export function BerkasPimpinanList({
             Cari Berkas
           </Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               id="berkas-pimpinan-search"
               placeholder="Cari nama atau catatan..."
@@ -365,7 +365,7 @@ export function BerkasPimpinanList({
               </div>
             )}
             <Table
-              className="w-full min-w-[850px] table-fixed [&_td]:py-2 [&_th]:py-2"
+              className="w-full min-w-[900px] sm:min-w-[850px] table-fixed [&_td]:py-2 [&_th]:py-2"
               aria-busy={isLoading}
             >
               <TableHeader className="sticky top-0 bg-white z-10">
@@ -400,7 +400,7 @@ export function BerkasPimpinanList({
                     </button>
                   </TableHead>
                   <TableHead
-                    className="w-[300px] bg-slate-50/40 whitespace-nowrap"
+                    className="w-[300px] bg-slate-50/40 whitespace-nowrap pr-4 sm:pr-6"
                     aria-sort={sortState("catatan")}
                   >
                     <button
@@ -412,7 +412,7 @@ export function BerkasPimpinanList({
                       <SortIcon col="catatan" />
                     </button>
                   </TableHead>
-                  <TableHead className="w-[130px] text-right bg-slate-50/40 whitespace-nowrap">
+                  <TableHead className="w-[180px] sm:w-[130px] text-right bg-slate-50/40 whitespace-nowrap pr-4">
                     Aksi
                   </TableHead>
                 </TableRow>
@@ -457,18 +457,18 @@ export function BerkasPimpinanList({
                           year: "numeric",
                         })}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap">
+                      <TableCell className="whitespace-nowrap pr-4 sm:pr-6">
                         <div className="truncate" title={item.catatan || ""}>
                           {item.catatan || "-"}
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="w-[180px] sm:w-[130px] text-right pr-4">
                         <div className="flex items-center justify-end gap-2">
                           {item.file && (
                             <Button
                               size="sm"
                               variant="outline"
-                              className="h-11 w-11 p-0"
+                              className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                               title={`Tampilkan file ${item.nama}`}
                               aria-label={`Tampilkan file Berkas ${item.nama}`}
                               onClick={() => handlePreview(item.id)}
@@ -479,7 +479,7 @@ export function BerkasPimpinanList({
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 p-0"
+                            className="h-11 w-11 p-0 sm:h-8 sm:w-8"
                             asChild
                             title={`Edit ${item.nama}`}
                           >
@@ -493,7 +493,7 @@ export function BerkasPimpinanList({
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-11 w-11 p-0 text-red-500 hover:text-red-600"
+                            className="h-11 w-11 p-0 text-red-500 hover:text-red-600 sm:h-8 sm:w-8"
                             onClick={() => setConfirmDeleteId(item.id)}
                             title={`Hapus ${item.nama}`}
                             aria-label={`Hapus Berkas ${item.nama}`}
