@@ -56,4 +56,9 @@ git tag -a "v${NEW_VERSION}" -m "Release v${NEW_VERSION}: ${SUMMARY}"
 echo "⬆️  Pushing to git origin with tags..."
 git push origin $(git rev-parse --abbrev-ref HEAD) --tags
 
+if command -v gh >/dev/null 2>&1; then
+  echo "🚀 Publishing official GitHub Release via gh CLI..."
+  gh release create "v${NEW_VERSION}" --title "v${NEW_VERSION} - ${SUMMARY}" --notes-from-tag || true
+fi
+
 echo "✅ Release v${NEW_VERSION} successfully published to GitHub!"

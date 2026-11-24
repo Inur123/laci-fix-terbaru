@@ -44,6 +44,7 @@ When the user instructs you to push to git:
    - `git commit -m "<structured commit message>"`
    - Create annotated tag: `git tag -a vX.Y.Z -m "Release vX.Y.Z: <summary>"`
    - Push branch and tags: `git push origin <branch> --tags`
+   - Publish official GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z - <summary>" --notes-from-tag` (if gh CLI is available)
 
 6. **Confirm to User**:
    - Report the committed version, tag created, and files pushed.
