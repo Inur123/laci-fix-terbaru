@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Dialog interaktif klik tanggal kalender yang menampilkan daftar agenda pada tanggal terpilih secara rapi.
 - **Database Migration**:
   - `003_add_asal_pimpinan.sql`: Penambahan kolom `asal_pimpinan` untuk mendukung fleksibilitas data pimpinan cabang/PAC.
+- **Lisensi & Metadata Repositori**:
+  - Penambahan lisensi resmi MIT License (`LICENSE`) dan dokumentasi lisensi pada `README.md`.
+  - Penyelarasan deskripsi, website, dan topik repository GitHub.
 
 ### Changed
 - **Desain Tombol Form & Action Diseragamkan**:

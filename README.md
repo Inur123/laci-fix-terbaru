@@ -1,5 +1,10 @@
 # Laci Digital
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/badge/Release-v1.1.0-green.svg)](https://github.com/Inur123/laci-fix-terbaru/releases)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
+[![Go](https://img.shields.io/badge/Go-1.24-00ADD8.svg)](https://golang.org/)
+
 Laci Digital adalah sistem administrasi organisasi IPNU dan IPPNU untuk tingkat
 PAC dan Cabang. Sistem ini mengelola arsip, anggota, pengajuan berkas, periode
 kepengurusan, agenda, presensi, aktivitas pengguna, email, dan backup database.
@@ -55,3 +60,7 @@ Sistem menggunakan sesi berbasis cookie HTTP-only, pembatasan akses berdasarkan
 peran, validasi input, pembatasan kepemilikan data, enkripsi data sensitif,
 enkripsi file, dan backup terenkripsi. Aktivitas penting dicatat untuk kebutuhan
 audit dan pemantauan operasional.
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
